@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Career Mentor</title>
+<meta name="description" content="Career Mentor: explore careers, take an interest quiz, follow a step-by-step roadmap and prepare your resume and interviews. Free, with no sign-up.">
+<meta name="theme-color" content="#1a56db">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a56db'/%3E%3Cpath d='M16 6l3.2 7.2L26 16l-6.8 2.8L16 26l-3.2-7.2L6 16l6.8-2.8z' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{--font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--bg:#f4f6fa;--surface:#fff;--ink:#101828;--muted:#566075;--line:#e1e5ee;--primary:#1a56db;--primary-ink:#fff;--primary-soft:#e8f0fe;--accent:#f59e0b;--ok:#15803d;--ok-soft:#e7f5ec;--bad:#b42318;--shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.06);--pad:16px;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#0c111b;--surface:#151b28;--ink:#eef1f7;--muted:#a1abbe;--line:#263044;--primary:#6ea0ff;--primary-ink:#0b1220;--primary-soft:#1b2a47;--accent:#fbbf24;--ok:#4ade80;--ok-soft:#10301e;--bad:#f87171;--shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35)}}
+@media (min-width:640px){:root{--pad:28px}}
+@media (min-width:900px){:root{--pad:clamp(28px,4vw,72px)}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--font);min-height:100vh}
+h1,h2,h3,h4{margin:0;line-height:1.2;letter-spacing:-.01em}
+h1{font-size:28px;font-weight:800}h2{font-size:22px;font-weight:700}h3{font-size:17px;font-weight:700}h4{font-size:15px;font-weight:700}
+p{margin:0 0 12px}
+a{color:var(--primary)}
+.muted{color:var(--muted)}.small{font-size:14px}.tiny{font-size:12.5px}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px;border-radius:6px}
+button{font-family:inherit;color:inherit;cursor:pointer}
+[hidden]{display:none!important}
+.ic{display:inline-flex;vertical-align:middle;flex:none}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px var(--pad)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;white-space:nowrap}
+.logo{width:32px;height:32px;border-radius:9px;background:var(--primary);color:var(--primary-ink);display:grid;place-items:center}
+.user{display:flex;align-items:center;gap:10px;min-width:0;font-size:13.5px;color:var(--muted)}
+.user .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:34vw;font-weight:600;color:var(--ink)}
+.tabs{display:flex;gap:2px;padding:0 calc(var(--pad) - 6px);border-top:1px solid var(--line)}
+.tab{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 7px;border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);font:600 11px/1.2 var(--font);white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-current=page]{color:var(--primary);border-bottom-color:var(--primary)}
+@media (min-width:900px){.tab{flex:0 0 auto;flex-direction:row;gap:8px;padding:13px 18px 11px;font-size:15px}}
+main{padding:22px var(--pad) 64px}
+.wrap{max-width:1500px;margin:0 auto}
+/* controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:10px;border:1px solid transparent;background:var(--primary);color:var(--primary-ink);font:600 15px/1.2 var(--font);transition:filter .15s,background .15s,border-color .15s;text-decoration:none}
+.btn:hover{filter:brightness(.94)}
+.btn.sec{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn.sec:hover{background:var(--primary-soft);filter:none}
+.btn.ghost{background:transparent;color:var(--primary);padding-inline:10px}
+.btn.ghost:hover{background:var(--primary-soft);filter:none}
+.btn.danger{background:var(--surface);color:var(--bad);border-color:var(--line)}
+.btn.sm{min-height:36px;padding:6px 12px;font-size:14px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row.sp{justify-content:space-between}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+input,select,textarea{width:100%;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+input[type=checkbox],input[type=radio]{width:auto}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 25%,transparent)}
+textarea{min-height:130px;resize:vertical}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.card>h3,.card>h2{margin-bottom:10px}
+.stack>*+*{margin-top:16px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font:600 12.5px/1.5 var(--font);border:0}
+button.chip{cursor:pointer}button.chip:hover{filter:brightness(.95)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--primary-soft);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:none;padding:9px 16px;border-radius:9px;font:600 14px/1.2 var(--font);color:var(--muted);min-height:40px}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--primary);border-radius:8px}
+.ring{--p:0;width:92px;height:92px;border-radius:50%;flex:none;background:conic-gradient(var(--primary) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center}
+.ring b{width:70px;height:70px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-size:19px}
+.hero{background:#0b2545;color:#fff;border-radius:18px;padding:26px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;border:42px solid rgba(255,255,255,.06)}
+.hero::after{content:"";position:absolute;right:90px;bottom:-60px;width:160px;height:160px;border-radius:50%;border:26px solid rgba(255,255,255,.05)}
+.hero>*{position:relative;z-index:1}
+.hero h1{color:#fff;max-width:760px}.hero p{color:#cbd5e6;max-width:640px;margin:10px 0 16px}
+.hero .btn.sec{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3)}
+.hero .btn:not(.sec){background:#fff;color:#0b2545}
+.stat{padding:16px}.stat b{display:block;font-size:26px;font-weight:800;line-height:1.1}.stat span{color:var(--muted);font-size:13.5px}
+.cats{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr))}
+.cat{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s,box-shadow .15s,transform .15s}
+.cat:hover{border-color:var(--c);box-shadow:var(--shadow);transform:translateY(-2px)}
+.badge{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--primary-soft);background:color-mix(in srgb,var(--c) 14%,var(--surface));color:var(--c)}
+.cat b{font-size:16px}.cat .go{margin-top:auto;font-weight:600;font-size:14px;display:flex;align-items:center;gap:6px}
+.list{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.item{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;transition:border-color .15s}
+.item:hover{border-color:var(--primary)}
+.item .t{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;font-weight:700}
+.item .d{color:var(--muted);font-size:14px}
+.star{color:var(--accent)}
+.stage{display:grid;grid-template-columns:26px 1fr;gap:12px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.stage input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--primary)}
+.stage.done{border-color:var(--ok);background:var(--ok-soft)}
+.stage.done .st{text-decoration:line-through;color:var(--muted)}
+.stage ul{margin:8px 0 0;padding-left:20px}
+.slist{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.slist .ph{grid-column:1/-1;margin-top:8px;font-size:15px;color:var(--primary);text-transform:uppercase;letter-spacing:.04em}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+.tbl th{font-weight:700;background:var(--primary-soft);white-space:nowrap}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font:600 15.5px/1.35 var(--font);min-height:52px}
+.opt:hover{border-color:var(--primary);background:var(--primary-soft)}
+.q{font-size:22px;font-weight:700;margin:6px 0 16px}
+details.card summary{cursor:pointer;font-weight:700;list-style-position:inside}
+details.card[open] summary{margin-bottom:10px}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.checks input{margin-top:4px;width:18px;height:18px;accent-color:var(--primary)}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;margin:0}
+.kv dt{font-weight:700;color:var(--muted)}.kv dd{margin:0}
+@media (max-width:520px){.kv{grid-template-columns:1fr}.kv dt{margin-top:8px}}
+.banner{padding:12px 14px;border-radius:10px;background:#fff4e5;color:#7a4500;border:1px solid #f5d9a8;font-size:14px}
+.empty{text-align:center;padding:34px 18px}
+.empty p{max-width:520px;margin-inline:auto}
+.resume{background:#fff;color:#111;border:1px solid var(--line);border-radius:6px;padding:28px 30px;font:14px/1.45 Arial,Helvetica,sans-serif}
+.resume h1{font-size:24px;margin:0;color:#111}.resume h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #999;margin:16px 0 6px;padding-bottom:3px;color:#111}
+.resume p,.resume li{margin:0 0 4px;color:#111}.resume ul{margin:0;padding-left:18px}
+#printRoot{display:none}
+@media print{
+  @page{margin:14mm}
+  body.printing{background:#fff}
+  body.printing .topbar,body.printing main{display:none!important}
+  body.printing #printRoot{display:block!important}
+  #printRoot .resume{border:0;padding:0}
+}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (min-width:900px){
+  h1{font-size:34px}
+  .hero{padding:38px clamp(28px,4vw,56px)}
+  .g2.wide{grid-template-columns:1.1fr .9fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+.lbl{display:none}@media (min-width:520px){.lbl{display:inline}}
+@media (max-width:420px){.user .nm{display:none}}
+.banner{margin-bottom:16px}.banner.good{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}main:focus{outline:none}
+
+/* ===== visual upgrade (CSS only) ===== */
+:root{--grad:linear-gradient(135deg,#1a56db 0%,#7c3aed 100%);--grad-text:linear-gradient(135deg,#1a56db,#7c3aed)}
+@media (prefers-color-scheme:dark){:root{--grad-text:linear-gradient(135deg,#8ab4ff,#c4a7ff)}}
+body{background-color:var(--bg);background-image:radial-gradient(900px 380px at 90% -120px,color-mix(in srgb,var(--primary) 14%,transparent),transparent),radial-gradient(700px 320px at -10% 30%,color-mix(in srgb,#7c3aed 8%,transparent),transparent);background-repeat:no-repeat}
+.topbar{background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:saturate(1.4) blur(10px);backdrop-filter:saturate(1.4) blur(10px)}
+.logo{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(26,86,219,.35)}
+.tab{border-radius:10px 10px 0 0;transition:background .15s,color .15s}
+.tab:hover{background:var(--primary-soft)}
+.tab[aria-current=page]{background:var(--primary-soft)}
+.btn:not(.sec):not(.ghost):not(.danger){background:var(--grad);color:#fff;box-shadow:0 6px 16px -6px rgba(26,86,219,.55)}
+.btn:not(.sec):not(.ghost):not(.danger):hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn{transition:filter .15s,background .15s,border-color .15s,transform .15s,box-shadow .15s}
+.hero{background-color:#0b2545;background-image:radial-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(135deg,#0b2545 0%,#1a3f8f 55%,#5b3cc4 100%);background-size:22px 22px,auto;box-shadow:0 18px 40px -18px rgba(26,63,143,.65)}
+@media (min-width:700px){.hero{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-opacity='.28' stroke-width='.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76'/%3E%3C/svg%3E"),radial-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(135deg,#0b2545 0%,#1a3f8f 55%,#5b3cc4 100%);background-position:right 44px center,0 0,0 0;background-size:170px,22px 22px,auto;background-repeat:no-repeat,repeat,no-repeat}}
+.hero .btn:not(.sec):not(.ghost):not(.danger){background:#fff;color:#0b2545;box-shadow:0 8px 20px -8px rgba(0,0,0,.45)}
+.card{border-radius:16px}
+.stat{border-left:4px solid var(--primary)}
+.stat b{background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+.g4>.stat:nth-child(2){border-left-color:var(--accent)}
+.g4>.stat:nth-child(3){border-left-color:var(--ok)}
+.g4>.stat:nth-child(4){border-left-color:#7c3aed}
+.cat{border-top:4px solid var(--c)}
+.cat:hover{transform:translateY(-3px);box-shadow:0 14px 28px -14px color-mix(in srgb,var(--c) 55%,transparent)}
+.badge{background:linear-gradient(135deg,color-mix(in srgb,var(--c) 24%,var(--surface)),color-mix(in srgb,var(--c) 8%,var(--surface)));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 28%,transparent)}
+.item{border-left:3px solid transparent}
+.item:hover{border-left-color:var(--primary);transform:translateY(-1px);box-shadow:var(--shadow)}
+.bar{height:10px}
+.bar i{background:var(--grad)}
+.ring{box-shadow:0 6px 18px -8px color-mix(in srgb,var(--primary) 60%,transparent)}
+.chip{background:linear-gradient(135deg,var(--primary-soft),color-mix(in srgb,var(--primary-soft) 70%,#7c3aed 12%))}
+.stage.done{box-shadow:inset 4px 0 0 var(--ok)}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="topbar-in"><div class="brand"><span class="logo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span><span>Career Mentor</span></div><div class="user" id="user"></div></div>
+<nav class="tabs" id="tabs" aria-label="Main sections" hidden></nav>
+</header>
+<main id="app" tabindex="-1"></main>
+<div id="printRoot" aria-hidden="true"></div>
+<noscript><p style="padding:24px;font:16px Arial">Career Mentor needs JavaScript. Please turn it on in your browser.</p></noscript>
+<script>
+"use strict";
+const CATS=[{"id": "arts", "name": "Arts and Humanities", "color": "#c2415b", "desc": "Visual arts, writing, history, society and culture.", "careers": ["Painter", "Fine Artist", "Illustrator", "Photographer", "Art Teacher", "Writer", "Journalist", "Historian", "Psychologist", "Social Worker", "Archaeologist", "Translator"]}, {"id": "sci", "name": "Science", "color": "#2563eb", "desc": "Research, discovery and applied science.", "careers": ["Research Scientist", "Biotechnologist", "Pharmacist", "Environmental Scientist", "Physicist", "Chemist", "Mathematician", "Statistician", "Laboratory Technologist", "Astronomer", "Geologist", "Mechanical Engineer"]}, {"id": "com", "name": "Commerce and Business", "color": "#c77700", "desc": "Finance, management, markets and entrepreneurship.", "careers": ["Chartered Accountant", "Financial Analyst", "Business Analyst", "Investment Banker", "Entrepreneur", "Marketing Manager", "HR Professional", "Banking Professional", "Business Consultant", "Economist", "Supply Chain Manager", "Digital Marketer"]}, {"id": "cs", "name": "Computer Science and Technology", "color": "#5b4bd5", "desc": "Software, data, AI, security and cloud.", "careers": ["Software Developer", "Full-Stack Developer", "Web Developer", "Mobile App Developer", "Data Analyst", "Data Scientist", "AI / ML Engineer", "Cybersecurity Analyst", "Cloud / DevOps Engineer", "Game Developer", "Blockchain Developer", "QA / Test Engineer", "Embedded / IoT Engineer"]}, {"id": "des", "name": "Design, Creative Arts and Media", "color": "#b0368f", "desc": "Design, film, animation, fashion and content.", "careers": ["UI/UX Designer", "Graphic Designer", "Animator", "Fashion Designer", "Interior Designer", "Art Director", "Video Editor", "Film Director", "Sound Designer", "Content Creator", "Product Designer", "Architect"]}, {"id": "trade", "name": "Skilled Trades and Vocational", "color": "#8a6d1f", "desc": "Hands-on technical careers with practical training.", "careers": ["Electrician", "Plumber", "Welder", "Carpenter", "Automobile Technician", "HVAC Technician", "CNC Machinist", "Chef", "Beautician", "Solar Panel Installer", "Drone Technician", "Mechanic"]}, {"id": "health", "name": "Healthcare and Life Sciences", "color": "#0e9f84", "desc": "Caring for people and advancing health.", "careers": ["Doctor", "Nurse", "Dentist", "Physiotherapist", "Medical Lab Technician", "Nutritionist", "Clinical Psychologist", "Veterinarian", "Radiographer", "Public Health Specialist", "Genetic Counsellor", "Occupational Therapist"]}, {"id": "law", "name": "Law, Government and Public Services", "color": "#34568b", "desc": "Justice, administration, defence and public service.", "careers": ["Lawyer", "Civil Servant", "Police Officer", "Judge", "Diplomat", "Defence Services Officer", "Policy Analyst", "Legal Advisor", "Public Administrator", "Fire Service Officer", "Customs Officer", "Urban Planner"]}, {"id": "edu", "name": "Education and Teaching", "color": "#d9622b", "desc": "Teaching, training and educational technology.", "careers": ["School Teacher", "University Professor", "Special Educator", "Career Counsellor", "Instructional Designer", "Education Technologist", "Early Childhood Educator", "Corporate Trainer", "Librarian", "Online Tutor", "Academic Researcher", "School Principal"]}, {"id": "new", "name": "Professional and Emerging Careers", "color": "#00838f", "desc": "New fields shaped by technology and sustainability.", "careers": ["Sustainability Consultant", "Renewable Energy Engineer", "Robotics Engineer", "Space Technologist", "Data Privacy Officer", "Product Manager", "Prompt Engineer", "Climate Analyst", "AR/VR Developer", "Biomedical Engineer", "Digital Forensics Analyst", "Esports Manager"]}];
+const PLAN={"Software Developer": [["Pick one main language", "Choose Python, Java or C++ and stick to it. Learn syntax, loops, functions and input/output until you can write small programs without looking things up."], ["Problem-solving basics", "Practise turning a problem into steps before coding. Solve 20 easy problems so you learn to read questions and test your own code."], ["Arrays and strings", "These appear in almost every coding round. Learn two pointers, sliding window and sorting through 25 problems."], ["Recursion and searching", "Understand how a function calls itself, then binary search and backtracking. Dry-run each solution on paper."], ["Linked lists, stacks, queues", "Learn how each is built and when to use it. Implement all three from scratch once."], ["Trees and graphs", "Cover traversals, BFS, DFS and shortest paths. Draw each example before coding."], ["Dynamic programming and greedy", "Start with classic problems like knapsack and coin change. Focus on spotting the repeating sub-problem."], ["Core CS subjects", "Revise OS (processes, memory), DBMS (SQL, normalisation, transactions) and networks (TCP, HTTP). Interviewers ask these in round two."], ["Object-oriented design", "Learn the four OOP pillars and SOLID with examples. Practise designing a parking lot or library system in classes."], ["Build two projects", "One full application and one that uses an external API. Use Git, write a README and deploy so recruiters can open it."]], "Full-Stack Developer": [["HTML and CSS", "Build layouts with flexbox and grid. Recreate three real websites so you learn how pages are structured and styled."], ["JavaScript fundamentals", "Cover variables, functions, arrays, objects and the DOM. Build a to-do app with no libraries."], ["Modern JavaScript", "Learn promises, async/await, modules and fetch. These make up most real front-end and back-end code."], ["A front-end framework", "Learn React or Vue: components, props, state and routing. Rebuild your to-do app with it."], ["Git and GitHub", "Practise commits, branches and pull requests. Teams expect this from day one."], ["Back-end with Node or Flask", "Create routes, handle requests and return JSON. Learn how a server connects to a front end."], ["Databases", "Learn SQL tables and joins, then MongoDB. Design a schema for a blog or shop before coding."], ["Authentication and security", "Add sign-up and login with hashed passwords and tokens. Learn input validation and common attacks like XSS."], ["Testing and deployment", "Write a few unit and API tests. Deploy to a free host and set up automatic builds."], ["Capstone app", "Build one app with login, create/read/update/delete and a clean interface. Document it well."]], "Web Developer": [["HTML structure and accessibility", "Learn semantic tags, forms and alt text. Accessible pages are better for everyone and impress reviewers."], ["CSS layout", "Master flexbox, grid and the box model. Rebuild one page three ways."], ["Responsive design", "Make pages work from phone to desktop with media queries and relative units. Test on a real phone."], ["JavaScript basics", "Variables, functions, events and the DOM. Build a calculator and a quiz."], ["Async JavaScript and APIs", "Fetch data from a public API and show it on a page. Handle loading and error states."], ["A framework", "Learn React or Vue and build a multi-page app with routing."], ["Performance", "Compress images, lazy-load and measure with Lighthouse. Fast pages are a common interview topic."], ["Browser tools and debugging", "Use dev tools for the network, console and performance tabs. Fix three bugs you create on purpose."], ["Basic back-end", "Build a small REST API with Node and connect it to a database."], ["Portfolio site", "Deploy three polished projects with live links, screenshots and short write-ups."]], "Mobile App Developer": [["Choose your platform", "Pick Kotlin (Android), Swift (iOS) or Flutter / React Native for both. Install the tools and run a hello-world app."], ["Language basics", "Learn the language's variables, classes and null safety. Write small programs before touching screens."], ["Layouts and UI", "Build screens with the platform's layout system. Recreate a login screen and a list screen."], ["Navigation", "Move between screens and pass data. Learn the back stack and deep links."], ["State management", "Learn how data changes update the screen. Use the recommended pattern for your platform."], ["Networking", "Call a REST API, parse JSON and show results. Handle slow and failed connections."], ["Local storage", "Save data with SQLite, Room or Core Data. Make the app useful offline."], ["Device features", "Add camera, location or notifications. Ask for permissions the correct way."], ["Testing and publishing", "Test on real devices, fix crashes and prepare a release build with an app-store listing."], ["Two portfolio apps", "Finish one utility app and one that uses an API. Record a short demo video of each."]], "Data Analyst": [["Spreadsheets", "Use formulas, lookups and pivot tables in Excel or Sheets. Clean a messy dataset by hand."], ["Statistics basics", "Learn mean, median, spread, distributions and correlation. These help you judge whether a result is meaningful."], ["SQL basics", "Write SELECT, WHERE, GROUP BY and ORDER BY queries on a sample database."], ["Advanced SQL", "Practise joins, subqueries and window functions. Solve 30 interview-style queries."], ["Python with pandas", "Load CSVs, filter, group and merge data. Clean one real dataset end to end."], ["Data cleaning", "Handle missing values, duplicates and wrong formats. Write down every decision you make."], ["Visualisation", "Pick the right chart for each question. Make clear charts with Matplotlib or Seaborn."], ["Dashboards", "Build an interactive dashboard in Power BI or Tableau from public data."], ["Business thinking", "Learn common metrics like retention and conversion. Practise turning a vague question into a measurable one."], ["Case-study portfolio", "Publish two projects: the question, your method, what you found and what the business should do."]], "Data Scientist": [["Python and NumPy", "Write clean Python and use arrays. Practise vector and matrix operations."], ["Maths foundation", "Revise linear algebra, calculus and probability at the level needed for ML. Focus on intuition."], ["Data wrangling", "Use pandas to clean, join and reshape data. Real data is messy, so practise on it."], ["Statistics and testing", "Learn confidence intervals, hypothesis tests and A/B testing."], ["Exploratory analysis", "Find patterns and problems in a dataset before modelling. Write what you learn."], ["Supervised learning", "Train regression, trees and ensembles with scikit-learn. Compare them honestly."], ["Model evaluation", "Learn train/test splits, cross-validation and metrics like precision, recall and AUC."], ["Feature engineering", "Create and select features that help the model. This often matters more than the algorithm."], ["Unsupervised learning", "Cover clustering and dimensionality reduction on a customer or text dataset."], ["End-to-end projects", "Build two projects from raw data to a clear recommendation, and publish the notebooks."]], "AI / ML Engineer": [["Python and maths", "Strengthen Python, then linear algebra and probability. These are the language of every model."], ["Data handling", "Use NumPy and pandas to prepare datasets. Learn to split data without leaking information."], ["Classical machine learning", "Train linear models, trees and SVMs. Understand how each makes decisions."], ["Evaluation and tuning", "Choose metrics, cross-validate and tune hyperparameters. Learn to detect overfitting."], ["Neural networks", "Build a small network from scratch, then in PyTorch or TensorFlow."], ["Computer vision or NLP", "Pick one area and complete a project, such as image classification or text sentiment."], ["Transformers and LLMs", "Learn attention, embeddings and fine-tuning ideas. Call an LLM API from code."], ["Retrieval-augmented apps", "Build a chatbot that answers from your own documents with embeddings and a vector store."], ["Deployment", "Wrap a model in FastAPI or Flask, containerise it and host it online."], ["Monitoring and ethics", "Learn about data drift, bias and responsible use. Add these notes to every project."]], "Cybersecurity Analyst": [["Networking basics", "Understand IP, DNS, TCP, HTTP and firewalls. You can't defend what you don't understand."], ["Linux and command line", "Practise file permissions, processes and shell scripts. Most security tools run on Linux."], ["Security fundamentals", "Learn confidentiality, integrity, availability, authentication and risk."], ["Cryptography basics", "Understand hashing, symmetric and public-key encryption, certificates and TLS."], ["Web security", "Study the OWASP Top 10, including SQL injection and XSS. Exploit and fix them in a practice app."], ["Hands-on labs", "Complete beginner paths on TryHackMe or Hack The Box. Aim for three rooms a week."], ["Security tools", "Use Wireshark, Nmap and Burp Suite. Write a short note on what each reveals."], ["Defence and monitoring", "Learn logs, SIEM tools and how analysts triage alerts."], ["Incident response", "Learn the steps: detect, contain, eradicate, recover and review. Practise with a sample scenario."], ["Certification and write-ups", "Prepare for CompTIA Security+ and publish lab write-ups on a blog or GitHub."]], "Cloud / DevOps Engineer": [["Linux and scripting", "Learn shell commands, permissions and Bash scripting. Automate one repetitive task."], ["Networking for cloud", "Learn IP ranges, subnets, load balancers and DNS."], ["Cloud fundamentals", "Pick AWS, Azure or GCP. Learn compute, storage, identity and billing."], ["Version control and branching", "Master Git workflows used by teams. Practise merge conflicts."], ["Docker", "Package an app into a container. Write a Dockerfile and use Docker Compose."], ["CI/CD pipelines", "Build, test and deploy automatically with GitHub Actions or Jenkins."], ["Kubernetes basics", "Learn pods, deployments and services. Run a small app on a local cluster."], ["Infrastructure as code", "Describe servers and networks in Terraform so setups are repeatable."], ["Monitoring and logging", "Add metrics, logs and alerts with Prometheus and Grafana."], ["Cloud certification and project", "Prepare for an associate-level certificate and deploy one full app with a pipeline."]], "UI/UX Designer": [["Design principles", "Learn layout, spacing, hierarchy, colour and typography. Study three apps you like and note why they work."], ["Accessibility", "Check contrast, text size and keyboard use. Good design includes everyone."], ["Figma basics", "Learn frames, components and auto layout. Copy one screen precisely."], ["User research", "Plan and run five short interviews. Record needs, not opinions about solutions."], ["Personas and journeys", "Turn research into personas and a journey map showing pain points."], ["Wireframes", "Sketch low-fidelity screens quickly. Compare at least two ideas per screen."], ["Prototyping", "Link screens into a clickable flow in Figma."], ["Usability testing", "Watch five people use your prototype and note where they struggle. Revise the design."], ["Design systems", "Create reusable buttons, colours and type styles for consistency."], ["Case studies and portfolio", "Publish two stories from problem to result, with your decisions and what you learned."]], "Game Developer": [["Programming basics", "Learn C# for Unity or C++ for Unreal. Practise variables, classes and loops."], ["Game maths", "Learn vectors, coordinates and basic physics used for movement and collisions."], ["Engine basics", "Install Unity or Unreal. Learn scenes, objects, components and the editor."], ["Your first game", "Clone a simple game like Pong. Finishing matters more than polish."], ["Player input and movement", "Add controls, camera and animation. Make the character feel good to control."], ["Physics and collisions", "Use colliders, triggers and forces. Build a small obstacle game."], ["Game design", "Learn game loops, difficulty curves and feedback. Playtest with friends."], ["Audio, UI and polish", "Add sound, menus, effects and a score. Small touches make games feel complete."], ["Optimisation", "Profile frame rate and memory. Fix at least three performance problems."], ["Publish a game", "Release one game on itch.io with a trailer and gather player feedback."]], "Blockchain Developer": [["Programming and web basics", "Get comfortable with JavaScript and how web apps work."], ["Blockchain fundamentals", "Learn blocks, hashing, consensus and how transactions are verified."], ["Cryptography basics", "Understand public/private keys, signatures and wallets."], ["Ethereum and the EVM", "Learn accounts, gas and how smart contracts execute."], ["Solidity basics", "Write simple contracts with variables, functions and events."], ["Contract testing", "Use Hardhat or Foundry to test and deploy locally."], ["Token standards", "Build an ERC-20 token and an ERC-721 NFT contract."], ["Web3 front end", "Connect a React app to a wallet with ethers.js."], ["Smart-contract security", "Study reentrancy, overflow and access-control bugs. Fix each in a sample contract."], ["Testnet portfolio", "Deploy a working dApp on a testnet and explain your design choices."]], "QA / Test Engineer": [["Testing basics", "Learn test levels, types and the software lifecycle."], ["Test case design", "Write clear test cases using equivalence classes and boundary values."], ["Bug reporting", "Write reports with steps, expected and actual results and evidence. Practise on a real app."], ["Manual and exploratory testing", "Explore apps without a script and find real defects. Log at least ten."], ["SQL for testers", "Query databases to verify data. Learn joins and simple checks."], ["Programming for automation", "Learn Python or Java well enough to write test scripts."], ["UI automation", "Use Selenium or Playwright to automate a login and checkout flow."], ["API testing", "Use Postman to test requests and automate assertions."], ["Test frameworks and CI", "Organise tests with PyTest or TestNG and run them on each commit."], ["Test portfolio", "Publish a test plan, automation project and bug reports for a public app."]], "Embedded / IoT Engineer": [["C programming", "Learn pointers, memory and bitwise operations. These are everyday tools for embedded work."], ["Electronics basics", "Understand voltage, current, resistors and reading a circuit diagram."], ["Microcontrollers", "Use an Arduino or ESP32. Blink an LED, then read a sensor."], ["Timers and interrupts", "Learn how hardware events trigger code without constant checking."], ["Communication protocols", "Use UART, I2C and SPI with real sensors and displays."], ["Sensors and actuators", "Read temperature and motion, drive motors and relays. Calibrate your readings."], ["Wireless and IoT", "Use Wi-Fi, Bluetooth and MQTT to send data online."], ["Cloud dashboard", "Send sensor data to a cloud service and chart it live."], ["RTOS and power management", "Learn tasks, scheduling and low-power modes."], ["Complete IoT project", "Build a device from sensor to dashboard, with a case, a diagram and a write-up."]]};
+const COMMON=[["Resume and LinkedIn", "Write a one-page resume with measurable results and links to your projects. Ask two people to review it."], ["Aptitude and reasoning", "Many companies screen with quantitative and logical tests. Practise 20 timed questions a week."], ["Communication and HR round", "Prepare a clear self-introduction and stories using the STAR method. Practise out loud."], ["Mock interviews", "Do at least five timed mock interviews, including one with a friend. Review what went wrong."], ["Apply, network and negotiate", "Apply in batches, ask alumni for referrals and learn to compare offers calmly."]];
+const COMMON2=[["Pricing, contracts and clients", "Learn how to quote a fair price, write simple agreements and keep records. Start with a few friendly clients."], ["Safety, ethics and standards", "Learn the safety rules, codes and ethical standards of your work and follow them every time."], ["Networking and marketing", "List yourself in local directories and on social media, show your best work and ask happy clients for reviews."], ["Customer communication", "Practise explaining your work clearly, setting honest timelines and handling complaints calmly."], ["Find work or start your own practice", "Apply for apprenticeships or jobs, or register your own small business, using your portfolio and references."]];
+const PROOF={"arts": "Collect your best work into a portfolio with a short note on your process for each piece.", "des": "Collect your best projects into a portfolio that shows the brief, your process and the result.", "sci": "Write up a lab report or a small research project with a clear method and results.", "com": "Complete two case studies or a small project with real numbers and a clear recommendation.", "health": "Keep a supervised log of cases or practical sessions, as your course requires.", "law": "Draft a legal memo, or take part in a moot court or a legal-aid clinic.", "trade": "Complete a practical job or test and keep photos and a signed work log.", "edu": "Prepare and deliver a sample lesson or workshop and collect feedback.", "new": "Finish a small real-world project and write down what you learned."};
+const RAWREC="Painter|Any stream; Class 12 for a BFA, or learn independently|BFA entrance tests or a portfolio review (optional)|drawing and perspective;colour theory;paint techniques|regular studio practice and group critiques|exhibitions and sales; a degree is optional\nFine Artist|Class 12 in any stream for a BFA (4 years)|BFA entrance tests or portfolio review at art colleges|composition and drawing;art history;sculpture or printmaking|studio work, workshops and residencies|BFA, then MFA for teaching or research\nIllustrator|Any stream; Class 12 for design or fine-arts courses|NID DAT, UCEED or college portfolio tests (optional)|drawing and anatomy;digital tools such as Procreate and Photoshop;storytelling and layout|daily sketching and client-style briefs|a strong portfolio; no licence needed\nPhotographer|Any stream; courses are open after Class 10 or 12|None required; some institutes hold entrance tests|camera and exposure;lighting;photo editing in Lightroom|shoot every week and assist a working photographer|portfolio; a diploma is optional\nArt Teacher|Graduation in fine arts plus B.Ed|CTET or your state TET for school teaching|drawing and art history;teaching methods;classroom management|practice teaching in a school|B.Ed and teacher eligibility test\nWriter|Any stream; no fixed qualification|None|grammar and style;story or article structure;editing and rewriting|write daily and submit to magazines or blogs|published portfolio\nJournalist|Any stream; graduation, often a journalism degree or diploma|Entrance tests for IIMC and university mass-communication courses|reporting and ethics;news writing;media law basics|campus or local newspaper and internships|degree or diploma helps but is not mandatory\nHistorian|Class 12 in any stream; BA then MA History|CUET for admission; UGC-NET for teaching posts|historical methods;Indian and world history;archival research|read primary sources and write research papers|MA, then M.Phil or PhD\nPsychologist|Class 12 in any stream; BA or BSc Psychology, then MA or MSc|CUET and university tests; clinical work needs a recognised M.Phil|basic psychology;research methods and statistics;counselling skills|supervised internship and case work|RCI licence for clinical roles\nSocial Worker|Any stream; BSW then MSW|University entrance tests such as CUET|social work methods;community development;case work and counselling|field placements with NGOs|BSW or MSW\nArchaeologist|Graduation, then MA in Archaeology or Ancient History|University PG entrance tests; UPSC or ASI recruitment for government posts|archaeological methods;ancient history;conservation|excavation field school and museum internships|MA, then PhD\nTranslator|Any stream; fluency in two languages, a language degree helps|None; government translator posts use SSC or UPSC exams|grammar in both languages;translation techniques;translation software tools|translate real texts and get them reviewed|diploma or certificate is optional\nResearch Scientist|Class 12 Science; BSc, MSc, then PhD|CUET or IIT JAM for MSc; CSIR-UGC NET or GATE for research fellowships|your core subject in depth;research methods;scientific writing|lab projects and internships at research institutes|PhD\nBiotechnologist|Class 12 with Biology and Chemistry; BSc or BTech Biotechnology|CUET or state entrance tests; GAT-B for postgraduate study|cell and molecular biology;genetics;bioinformatics basics|lab skills such as PCR and cell culture|MSc or BTech, PhD for research\nPharmacist|Class 12 Science (PCM or PCB); D.Pharm or B.Pharm|State or university entrance tests for B.Pharm|pharmaceutics;pharmacology;pharmaceutical chemistry|hospital or retail pharmacy training|registration with your State Pharmacy Council\nEnvironmental Scientist|Class 12 Science; BSc then MSc Environmental Science|CUET or IIT JAM|ecology;environmental chemistry;GIS and remote sensing|field surveys and environmental-impact internships|MSc; NET for research\nPhysicist|Class 12 with Physics, Chemistry and Maths; BSc Physics then MSc|CUET and IIT JAM; NET or GATE for research|classical and quantum mechanics;maths for physics;electronics and lab methods|lab practicals and research projects|MSc, then PhD\nChemist|Class 12 Science; BSc then MSc Chemistry|CUET and IIT JAM|organic chemistry;inorganic chemistry;analytical chemistry|lab techniques and lab safety|MSc; PhD for research\nMathematician|Class 12 with Mathematics; BSc Maths then MSc|CUET, IIT JAM, and NBHM for research|calculus and analysis;algebra;probability and statistics|solve problem sets and join maths circles|MSc, then PhD\nStatistician|Class 12 with Mathematics; BSc Statistics then MSc|CUET and ISI admission tests|probability;statistical inference;regression with R or Python|analyse real datasets|MSc; Indian Statistical Service through UPSC\nLaboratory Technologist|Class 12 Science; DMLT or BSc MLT|State or university admission tests|clinical biochemistry;haematology and microbiology;laboratory safety|hospital or diagnostic-lab internship|state paramedical registration where required\nAstronomer|Class 12 with Physics, Chemistry and Maths; BSc Physics, MSc, then PhD|IIT JAM, JEST, NET or GATE|mechanics and astrophysics;mathematics;data analysis and programming|observation projects and institute internships|PhD\nGeologist|Class 12 Science; BSc or MSc Geology|CUET or IIT JAM; UPSC Combined Geo-Scientist exam for government jobs|mineralogy;structural geology;field mapping|geology field camps and surveys|MSc; Geological Survey of India through UPSC\nMechanical Engineer|Class 12 with Physics, Chemistry and Maths; BTech, or a diploma after Class 10|JEE Main and Advanced or state CETs; GATE for MTech|thermodynamics;mechanics of materials;CAD and manufacturing|workshop practice and industry internships|BTech degree\nChartered Accountant|Class 12 in any stream, then CA Foundation|ICAI CA Foundation, Intermediate and Final exams|accounting;taxation and audit;corporate law and finance|3 years of articleship under a practising CA|ICAI membership\nFinancial Analyst|BCom, BBA or any degree plus finance skills|None mandatory; CFA or NISM certifications help|financial statements;valuation;Excel and financial modelling|build models for listed companies|CFA is optional\nBusiness Analyst|Any graduation|None; CBAP is optional|requirements gathering;SQL and Excel;process modelling|work on a real business case|CBAP or PMI-PBA is optional\nInvestment Banker|BCom, BBA or BTech, then an MBA in Finance|CAT or GMAT for top MBA programmes|corporate finance;valuation;financial modelling|internship at a bank or advisory firm|MBA or CFA helps\nEntrepreneur|Any stream; no fixed qualification|None|business models;marketing and sales;basic finance and legal registration|launch a small pilot and test it with real customers|business registration and any licences your sector needs\nMarketing Manager|BBA or BCom, then an MBA in Marketing|CAT, MAT or XAT for MBA admission|consumer behaviour;digital marketing;branding and analytics|run a small campaign or internship|MBA helps\nHR Professional|BBA, BA or an MBA in HR|CAT, XAT or MAT for MBA admission|recruitment;labour laws;compensation and performance management|HR internship|MBA in HR or a PG diploma\nBanking Professional|Graduation in any stream|IBPS, SBI PO or Clerk and RBI Grade B exams|banking awareness;quantitative aptitude;reasoning and English|mock tests and bank internships|JAIIB and CAIIB after joining\nBusiness Consultant|Graduation, usually followed by an MBA|CAT or GMAT for top MBA programmes|problem structuring;industry research;slide and Excel skills|case-interview practice|MBA helps\nEconomist|Class 12 (Maths helps); BA or BSc then MA Economics|CUET, ISI and DSE entrance tests; NET for teaching|micro and macroeconomics;econometrics;research writing|research projects with real data|MA, then PhD\nSupply Chain Manager|BBA, BTech or an MBA in operations|CAT or MAT for MBA admission|logistics;inventory and procurement;ERP tools|warehouse or logistics internship|APICS or CSCP is optional\nDigital Marketer|Any stream|None; Google and Meta certifications are optional|SEO;paid advertising;content and analytics|run a real blog or ad campaign|Google Ads and Analytics certificates\nSoftware Developer|Class 12 (PCM helps); BTech, BCA, MCA or self-taught with projects|None; companies use coding tests and interviews|||degree is common but not mandatory\nFull-Stack Developer|Any stream; BTech, BCA or self-taught with projects|None; portfolio and coding interviews|||degree is optional\nWeb Developer|Any stream; a degree is optional|None; portfolio review|||degree is optional\nMobile App Developer|Any stream; BTech or BCA helps|None; portfolio and technical rounds|||degree is optional\nData Analyst|Any graduation; maths or statistics helps|None; SQL and Excel tests in interviews|||certificates are optional\nData Scientist|Graduation with maths or statistics; often MSc or MTech|None for jobs; GATE for MTech|||a master's degree is often preferred\nAI / ML Engineer|BTech, BCA, MCA or MSc with strong maths|None for jobs; GATE for MTech|||a master's degree helps\nCybersecurity Analyst|BTech, BCA or any graduation with networking skills|None; certification exams such as Security+|||CompTIA Security+ or CEH is optional\nCloud / DevOps Engineer|BTech, BCA or self-taught with projects|None; cloud certification exams|||AWS, Azure or GCP associate certificates\nGame Developer|Any stream; BTech, BCA or a game-design degree|None; portfolio review|||portfolio matters most\nBlockchain Developer|BTech, BCA or self-taught with projects|None; portfolio and code reviews|||portfolio matters most\nQA / Test Engineer|Any graduation; BTech or BCA helps|None; ISTQB is optional|||ISTQB is optional\nEmbedded / IoT Engineer|Class 12 with PCM; BTech in ECE, EEE or CS|GATE for MTech|||BTech degree\nUI/UX Designer|Any stream; a design degree helps|NID DAT or UCEED for design degrees; none for jobs|||portfolio matters most\nGraphic Designer|Any stream; Class 12 for design degrees|NID DAT, UCEED, NIFT or college tests|layout and typography;colour and branding;Photoshop and Illustrator|redesign real brands as practice|portfolio\nAnimator|Any stream; Class 12 for animation degrees|College or design entrance tests such as UCEED|principles of animation;2D or 3D software;storyboarding|make a short animated film|portfolio or showreel\nFashion Designer|Class 12 in any stream; B.Des or a diploma|NIFT, NID DAT or other design entrance tests|sketching;pattern making and sewing;textiles|make a small collection|degree or diploma and a portfolio\nInterior Designer|Class 12 in any stream; diploma or B.Des|NID DAT, UCEED or college tests|space planning;materials and lighting;AutoCAD and SketchUp|design a real room or small space|degree or diploma; registration is optional\nArt Director|Degree in design or fine arts plus work experience|None|visual storytelling;team leadership;branding and campaigns|years of work as a designer or illustrator|portfolio\nVideo Editor|Any stream|None; film-school entrance is optional|editing rhythm;Premiere Pro or DaVinci Resolve;sound and colour basics|edit short films and client projects|showreel\nFilm Director|Any stream; film school is optional|FTII or SRFTI entrance exams for film school|screenwriting;cinematography basics;directing actors|make short films|film-school diploma is optional; showreel\nSound Designer|Any stream; a diploma in sound engineering helps|Institute entrance tests such as FTII|acoustics;audio workstation software;foley and mixing|sound-design short films|portfolio\nContent Creator|Any stream|None|storytelling;video and editing;audience analytics|post consistently for 90 days|none required\nProduct Designer|Class 12 for B.Des, or any graduate with design skills|NID DAT or UCEED|design thinking;sketching and CAD;prototyping and materials|build and test a physical prototype|B.Des or M.Des helps\nArchitect|Class 12 with Physics, Chemistry and Maths; BArch (5 years)|NATA or JEE Main Paper 2|design studio;building materials;structures and CAD|architectural internship|Council of Architecture registration\nElectrician|Class 10 pass; ITI Electrician (2 years)|ITI admission through state counselling or merit|wiring and circuits;electrical safety codes;motors and panels|apprenticeship under a licensed electrician|NCVT certificate; state licence for contracting\nPlumber|Class 8 to 10 pass; ITI Plumber or an NSDC course|ITI admission|pipe fitting;sanitary systems;water supply and drainage|on-site apprenticeship|NCVT or NSDC certificate\nWelder|Class 8 to 10 pass; ITI Welder|ITI admission|arc and gas welding;blueprint reading;workshop safety|workshop practice|NCVT certificate and welding qualification tests\nCarpenter|Class 8 to 10 pass; ITI Carpenter|ITI admission|wood joinery;measuring and drawing;finishing|workshop and site apprenticeship|NCVT certificate\nAutomobile Technician|Class 10 pass; ITI Mechanic Motor Vehicle or a diploma|ITI or polytechnic admission|engine systems;electrical systems and diagnostics;electric-vehicle basics|workshop apprenticeship|NCVT certificate or diploma\nHVAC Technician|Class 10 pass; ITI Refrigeration and Air Conditioning|ITI admission|refrigeration cycle;electrical controls;installation and servicing|apprenticeship|NCVT certificate\nCNC Machinist|Class 10 pass; ITI Machinist or a CNC course|ITI or NSDC admission|technical drawing;CNC programming with G-code;measurement and tolerances|shop-floor training|NCVT or NSDC certificate\nChef|Class 12; a diploma or degree in hotel management or culinary arts|NCHMCT JEE for IHM degrees|knife skills and basics;cuisines;kitchen hygiene and costing|kitchen internship|diploma or degree; food-safety rules apply\nBeautician|Class 10 pass; a cosmetology course|None; institute admission|skin and hair care;makeup;hygiene and client handling|salon apprenticeship|NSDC or institute certificate; local salon rules vary\nSolar Panel Installer|Class 10 pass; ITI Electrician or an NSDC Solar PV course|ITI or NSDC admission|solar PV basics;wiring and inverters;site assessment|installation apprenticeship|NSDC or sector skill council certification\nDrone Technician|Class 10 to 12; a drone training course|Training at a DGCA-approved remote pilot training organisation|drone assembly;flight rules and safety;maintenance and payloads|supervised flying hours|DGCA remote pilot certificate for commercial flying\nMechanic|Class 10 pass; ITI Mechanic trade|ITI admission|tools and measurement;machine maintenance;fault diagnosis|apprenticeship|NCVT certificate\nDoctor|Class 12 with Physics, Chemistry, Biology and English; MBBS (about 5.5 years including internship)|NEET-UG for MBBS; NEET-PG for specialisation|anatomy;physiology and biochemistry;clinical medicine|compulsory internship after MBBS|National Medical Commission or State Medical Council registration\nNurse|Class 12 (Science for BSc Nursing); GNM or BSc Nursing|State or university nursing entrance tests|anatomy and physiology;nursing foundations;community health|clinical postings in hospitals|State Nursing Council registration\nDentist|Class 12 with Physics, Chemistry and Biology; BDS|NEET-UG|dental anatomy;oral pathology;clinical dentistry|clinical training and internship|Dental Council registration\nPhysiotherapist|Class 12 Science with Biology; BPT|State or university entrance tests|anatomy;exercise therapy;electrotherapy|clinical internship|state council registration where applicable\nMedical Lab Technician|Class 12 Science; DMLT or BSc MLT|State admission tests|haematology;clinical biochemistry;microbiology|hospital lab internship|paramedical council registration where required\nNutritionist|Class 12 Science; BSc in Nutrition or Dietetics, then MSc|University entrance tests|human nutrition;clinical dietetics;food science|hospital or clinic internship|dietitian registration where required\nClinical Psychologist|Graduation in Psychology, MA or MSc, then an M.Phil in Clinical Psychology|University and institute entrance tests such as NIMHANS|abnormal psychology;psychological assessment;therapy methods|supervised clinical internship|Rehabilitation Council of India licence\nVeterinarian|Class 12 with Physics, Chemistry and Biology; BVSc and AH (5 years)|NEET-UG|animal anatomy;veterinary pharmacology;surgery and clinical medicine|clinical internship|State Veterinary Council registration\nRadiographer|Class 12 Science; BSc Radiology or a diploma|State admission tests|radiation physics;imaging techniques;patient care and safety|hospital imaging department posting|registration under radiation-safety rules\nPublic Health Specialist|Graduation in health or science, then MPH|University or institute entrance tests|epidemiology;biostatistics;health policy|field projects with health programmes|MPH\nGenetic Counsellor|BSc in Life Sciences, then MSc Genetic Counselling|Institute entrance tests|human genetics;counselling skills;ethics|clinical genetics rotations|MSc; check current certification rules\nOccupational Therapist|Class 12 Science with Biology; BOT|State or university entrance tests|anatomy;rehabilitation methods;assistive technology|clinical internship|registration with the relevant council where applicable\nLawyer|Class 12 for the 5-year integrated LLB, or any graduation for the 3-year LLB|CLAT, AILET or university tests for admission; AIBE after the degree|constitutional law;criminal and civil procedure;legal writing|internships with advocates and moot courts|enrolment with a State Bar Council and AIBE\nCivil Servant|Graduation in any stream|UPSC Civil Services Examination (age and attempt limits apply)|polity and governance;history and geography;current affairs and essay writing|answer writing and prelims mock tests|training after selection\nPolice Officer|Class 12 or graduation depending on the post|State police exams or SSC; UPSC for IPS|general awareness;reasoning and aptitude;law and procedures|physical fitness training|police academy training\nJudge|LLB (3 or 5 year); some states ask for a few years of practice|State Judicial Services exams, rules vary by state|constitutional law;procedural laws;evidence and drafting|legal practice and judgment writing|appointment after the exam\nDiplomat|Graduation in any stream|UPSC Civil Services for the Indian Foreign Service|international relations;world history and geography;foreign languages|current-affairs reading and mock tests|training after selection\nDefence Services Officer|Class 12 or graduation depending on the entry|NDA, CDS, AFCAT or technical entries, then the SSB interview|maths and general knowledge;English;SSB personality and reasoning|fitness training|training academy after selection\nPolicy Analyst|Graduation, often an MA in Public Policy or Economics|University entrance tests|public policy;data analysis;policy writing|think-tank or NGO internship|MA or MPP\nLegal Advisor|LLB (3 or 5 year)|CLAT or university tests; AIBE if you appear in court|corporate and contract law;compliance;legal drafting|corporate legal internship|Bar Council enrolment if you appear in court\nPublic Administrator|Graduation in any stream|UPSC or state PCS exams|governance;public finance;administrative law|local government internships|training after selection\nFire Service Officer|Class 12 or graduation; a fire engineering diploma or degree helps|State fire service recruitment; National Fire Service College entrance|fire science;rescue techniques;hazard management|physical fitness and drills|National Fire Service College or state academy certificate\nCustoms Officer|Graduation in any stream|SSC CGL for Inspector posts, or UPSC Civil Services for IRS|customs law;economy basics;quantitative aptitude and reasoning|mock tests|departmental training after selection\nUrban Planner|Class 12 with Maths for BPlan, or an architecture graduate for MPlan|JEE Main Paper 2 for BPlan; university tests for MPlan|planning theory;GIS;transport and housing policy|planning studio projects|BPlan or MPlan; ITPI membership\nSchool Teacher|Graduation plus B.Ed (or D.El.Ed for primary classes)|CTET or your state TET|your subject;teaching methods;child psychology|teaching practice in a school|B.Ed and teacher eligibility test\nUniversity Professor|Master's degree in your subject|UGC-NET or SET; a PhD is preferred|your subject in depth;research methods;academic writing|teaching assistantship and research|PhD and NET\nSpecial Educator|B.Ed in Special Education or a D.Ed|Admission tests for RCI-approved courses|disability and inclusion;assistive tools;individual education plans|supervised practice in special schools|Rehabilitation Council of India registration\nCareer Counsellor|Graduation in Psychology or Education plus a counselling certificate|None mandatory|career assessments;counselling skills;labour-market knowledge|supervised counselling sessions|counselling diploma helps\nInstructional Designer|Any graduation; education or design helps|None|learning theory;storyboarding;authoring tools such as Articulate|build a sample course|portfolio\nEducation Technologist|Graduation in education or technology|None|learning platforms;educational data;accessibility|run a small pilot with students|portfolio\nEarly Childhood Educator|Class 12; an ECCE diploma or B.El.Ed|State or university admission tests|child development;play-based learning;classroom planning|supervised nursery practice|ECCE diploma or degree\nCorporate Trainer|Graduation plus expertise in your field|None|adult learning;presentation skills;assessment design|deliver short workshops|train-the-trainer certificate is optional\nLibrarian|BLISc then MLISc|University entrance tests; UGC-NET for teaching|cataloguing and classification;information retrieval;library management|library internship|BLISc and MLISc\nOnline Tutor|Strong subject knowledge; graduation helps|None|your subject in depth;online teaching tools;lesson planning|teach trial lessons|none required\nAcademic Researcher|Master's degree, then a PhD|NET or GATE and university PhD entrance tests|research design;literature review;academic publishing|work on a supervised research project|PhD\nSchool Principal|B.Ed plus M.Ed or a master's degree, and years of teaching|Board criteria and experience rules, which vary|school leadership;curriculum planning;finance and administration|years of teaching and coordination roles|M.Ed; check your board's rules\nSustainability Consultant|Graduation in science, engineering, management or environment|None; GRI and ESG certifications help|ESG reporting;carbon accounting;sustainability strategy|audit a small organisation|ESG certificates are optional\nRenewable Energy Engineer|Class 12 with PCM; BTech in Electrical, Mechanical or Energy|JEE Main or state CETs|solar and wind systems;power electronics;energy storage|plant or installation internship|BTech; skill-council certificates for technicians\nRobotics Engineer|Class 12 with PCM; BTech in Mechatronics, ECE or CS|JEE Main or state CETs|programming in Python and C++;kinematics and control;ROS and sensors|build a robot project|BTech or MTech\nSpace Technologist|Class 12 with PCM; BTech in Aerospace, ECE or CS|JEE Main and Advanced; ISRO recruitment tests|orbital mechanics;electronics;systems engineering|satellite or CubeSat projects|BTech or MTech\nData Privacy Officer|Graduation in law, IT or management|None; privacy certifications help|data protection law;risk assessment;security basics|run a privacy impact assessment|CIPP or ISO 27701 is optional\nProduct Manager|Any graduation; engineering or an MBA is common|None; MBA entrance tests if you take an MBA|user research;roadmapping;metrics and analytics|ship a side project or feature|PM certificates are optional\nPrompt Engineer|Any graduation; programming helps|None|how language models work;prompt patterns;evaluation and testing|build and test prompts on real tasks|portfolio\nClimate Analyst|BSc or BTech, then an MSc in climate, environment or data|CUET, IIT JAM or GATE|climate science;data analysis in Python;modelling and GIS|research project with climate data|MSc\nAR/VR Developer|Class 12 with PCM or any stream; BTech or BCA is preferred|JEE Main or university tests|C# and Unity;3D maths;spatial interface design|build a small AR or VR app|portfolio\nBiomedical Engineer|Class 12 with PCM or PCB; BTech in Biomedical Engineering|JEE Main or state CETs|human physiology;medical instruments;signals and imaging|hospital or device-company internship|BTech or MTech\nDigital Forensics Analyst|BSc or BTech in CS, cyber security or forensic science|None; CUET for some courses|file systems;network forensics;evidence handling and law|forensic lab exercises and capture-the-flag events|certifications such as CHFI are optional\nEsports Manager|Any graduation; management or sports management helps|None|team and event management;sponsorship;game knowledge|organise a small tournament|portfolio";
+const ROLEQ={"Software Developer": ["Explain the difference between an array and a linked list.", "How would you detect a cycle in a linked list?", "Describe a project you built and a bug that taught you something.", "What happens when you type a URL into a browser?"], "Data Analyst": ["How would you handle missing values in a dataset?", "Write a query to find the second highest salary.", "Explain the difference between correlation and causation.", "Which metric would you track for a food-delivery app, and why?"], "AI / ML Engineer": ["Explain overfitting and three ways to reduce it.", "What is the difference between precision and recall?", "How does a transformer use attention?", "How would you deploy and monitor a model in production?"], "Web Developer": ["Explain the CSS box model.", "What is the difference between let, const and var?", "How does a REST API differ from GraphQL?", "How would you make a slow page faster?"], "Full-Stack Developer": ["How does authentication work with JWT?", "How would you design the schema for a blog?", "Explain how you would scale a web app."], "Data Scientist": ["How do you choose between two models?", "Explain bias vs variance.", "How would you explain a model's result to a manager?"], "Cybersecurity Analyst": ["What is the difference between symmetric and asymmetric encryption?", "Explain SQL injection and how to prevent it.", "What would you do first during a suspected breach?"], "Cloud / DevOps Engineer": ["What is the difference between a container and a VM?", "Describe a CI/CD pipeline you built.", "How would you roll back a bad deployment?"], "Mobile App Developer": ["Explain the Android or iOS app lifecycle.", "How do you handle state in your app?", "How would you support offline use?"], "UI/UX Designer": ["Walk me through your design process.", "How do you design for accessibility?", "How do you handle feedback you disagree with?"], "Game Developer": ["What is a game loop?", "How do you optimise a game that runs slowly?", "Describe a game you finished and what you learned."], "Blockchain Developer": ["How does proof of work differ from proof of stake?", "What is a reentrancy attack?", "What are gas fees and how can you reduce them?"], "QA / Test Engineer": ["What makes a good bug report?", "Difference between smoke and regression testing?", "How do you decide what to automate?"], "Embedded / IoT Engineer": ["What is an interrupt and how is it handled?", "Compare I2C and SPI.", "How would you debug a device that resets randomly?"]};
+const DESC_RAW=`Painter|Creates original paintings for galleries, collectors, commissions and public spaces.
+Fine Artist|Produces original artworks in media such as painting, sculpture or printmaking and shows them in exhibitions.
+Illustrator|Creates images for books, magazines, advertising, games and digital media.
+Photographer|Captures images for news, weddings, products, fashion, events and documentary work.
+Art Teacher|Teaches drawing, painting and art appreciation in schools and art institutes.
+Writer|Writes books, articles, scripts, copy or online content for readers and clients.
+Journalist|Researches and reports news and stories for print, broadcast and digital media.
+Historian|Studies records and evidence to explain the past through research, teaching and writing.
+Psychologist|Studies behaviour and the mind and applies it in counselling, education, research or organisations.
+Social Worker|Supports individuals, families and communities facing social and economic difficulties.
+Archaeologist|Recovers and studies physical remains to understand past societies, in the field and in museums.
+Translator|Converts written text between languages while keeping meaning, tone and context.
+Research Scientist|Plans and carries out experiments and studies that add to scientific knowledge.
+Biotechnologist|Uses living cells and biological processes to develop medicines, foods and materials.
+Pharmacist|Prepares and dispenses medicines and advises patients on their safe use.
+Environmental Scientist|Studies air, water, soil and ecosystems and advises on protecting them.
+Physicist|Studies matter, energy and forces in research, industry or teaching.
+Chemist|Studies substances and their reactions in laboratories, industry and quality control.
+Mathematician|Works on mathematical theory and applies it to problems in science, finance and technology.
+Statistician|Collects and analyses data to help organisations and researchers make decisions.
+Laboratory Technologist|Runs tests on samples in hospitals, research or industry and reports accurate results.
+Astronomer|Observes and models stars, planets and galaxies using telescopes, data and physics.
+Geologist|Studies rocks, minerals and the structure of the Earth for resources, hazards and construction.
+Mechanical Engineer|Designs, tests and improves machines, engines and manufacturing systems.
+Chartered Accountant|Handles accounting, auditing, taxation and financial advice for businesses and individuals.
+Financial Analyst|Studies financial data and markets to guide investment and business decisions.
+Business Analyst|Finds business problems and recommends process and technology improvements using data.
+Investment Banker|Advises companies on raising money, mergers and acquisitions.
+Entrepreneur|Starts and runs a business and is responsible for the product, customers and finances.
+Marketing Manager|Plans how products are positioned, priced, promoted and sold.
+HR Professional|Hires, trains and supports employees and manages workplace policies.
+Banking Professional|Serves customers and manages loans, deposits and operations in banks.
+Business Consultant|Advises organisations on strategy, operations and performance.
+Economist|Analyses how resources, markets and policies work and forecasts their effects.
+Supply Chain Manager|Plans and manages how goods move from suppliers to customers.
+Digital Marketer|Promotes brands online through search, social media, email and advertising.
+Software Developer|Designs, writes and tests software applications and systems.
+Full-Stack Developer|Builds both the user-facing and the server-side parts of web applications.
+Web Developer|Builds and maintains websites and web applications.
+Mobile App Developer|Builds apps for Android, iOS or both.
+Data Analyst|Cleans and analyses data and presents findings that guide decisions.
+Data Scientist|Builds statistical and machine-learning models to find patterns and make predictions.
+AI / ML Engineer|Builds machine-learning systems and puts them into real products.
+Cybersecurity Analyst|Protects systems and data by monitoring, testing and responding to threats.
+Cloud / DevOps Engineer|Builds and automates the infrastructure and pipelines that run software.
+Game Developer|Programs and designs video games for computers, consoles and phones.
+Blockchain Developer|Builds smart contracts and decentralised applications.
+QA / Test Engineer|Tests software to find defects before users do, by hand and with automation.
+Embedded / IoT Engineer|Programs the electronics inside devices and connects them to networks.
+UI/UX Designer|Designs how digital products look and work, based on user research.
+Graphic Designer|Creates visual communication such as logos, layouts and marketing material.
+Animator|Creates moving images for films, games, advertising and education.
+Fashion Designer|Designs clothing and accessories from first concept to finished collection.
+Interior Designer|Plans and styles indoor spaces so they are functional and attractive.
+Art Director|Leads the visual style and the creative team on campaigns, films or publications.
+Video Editor|Cuts footage, sound and graphics into finished films, videos and shows.
+Film Director|Leads the creative vision of a film and guides the cast and crew.
+Sound Designer|Creates and mixes sound for films, games, theatre and media.
+Content Creator|Produces videos, writing or audio for an online audience and builds a following.
+Product Designer|Designs physical or digital products by balancing user needs, form and function.
+Architect|Designs buildings and spaces and oversees their construction.
+Electrician|Installs, tests and repairs electrical wiring and equipment safely.
+Plumber|Installs and repairs water supply, drainage and sanitary systems.
+Welder|Joins metal parts using heat and filler material in construction and manufacturing.
+Carpenter|Makes and fits wooden structures, furniture and fittings.
+Automobile Technician|Diagnoses and repairs vehicles, including their electrical and electronic systems.
+HVAC Technician|Installs and services heating, ventilation, air-conditioning and refrigeration systems.
+CNC Machinist|Sets up and runs computer-controlled machines that make precise metal and plastic parts.
+Chef|Plans menus and prepares food in restaurants, hotels and catering businesses.
+Beautician|Provides skin, hair and grooming services to clients.
+Solar Panel Installer|Installs and maintains solar power systems on homes and buildings.
+Drone Technician|Builds, maintains and operates drones for mapping, inspection and photography.
+Mechanic|Maintains and repairs machines and mechanical equipment.
+Doctor|Diagnoses and treats illness and promotes health, after medical training and registration.
+Nurse|Cares for patients, gives treatment and supports doctors in hospitals and communities.
+Dentist|Diagnoses and treats problems of the teeth, gums and mouth.
+Physiotherapist|Helps people recover movement and manage pain through exercise and therapy.
+Medical Lab Technician|Performs laboratory tests on blood and other samples to support diagnosis.
+Nutritionist|Advises people on food and diet for health and performance.
+Clinical Psychologist|Assesses and treats mental health conditions after specialised training and licensing.
+Veterinarian|Diagnoses and treats animals and advises on their care.
+Radiographer|Operates imaging equipment such as X-ray and CT to produce diagnostic images.
+Public Health Specialist|Works to prevent disease and improve health across communities and populations.
+Genetic Counsellor|Helps people understand genetic conditions and the choices they involve.
+Occupational Therapist|Helps people regain the skills for daily living and work after illness or injury.
+Lawyer|Advises clients and represents them in courts and legal matters.
+Civil Servant|Works in government administration and policy, selected through the civil services examination.
+Police Officer|Maintains law and order, prevents crime and investigates offences.
+Judge|Hears cases and decides them according to law, after a career in the legal system.
+Diplomat|Represents the country abroad and works on international relations and negotiations.
+Defence Services Officer|Leads units in the army, navy or air force.
+Policy Analyst|Researches public problems and recommends policy options.
+Legal Advisor|Gives legal guidance to organisations on contracts, compliance and risk.
+Public Administrator|Manages government programmes, budgets and public services.
+Fire Service Officer|Leads fire fighting, rescue and fire-safety work.
+Customs Officer|Enforces customs and trade rules and checks goods and travellers at borders.
+Urban Planner|Plans how land, housing, transport and public spaces are used in cities.
+School Teacher|Teaches students in schools and supports their learning and development.
+University Professor|Teaches at a university and carries out research in a subject.
+Special Educator|Teaches and supports students with disabilities and learning needs.
+Career Counsellor|Helps students and professionals choose and plan their careers.
+Instructional Designer|Designs courses and learning materials for schools, companies and online platforms.
+Education Technologist|Chooses and builds technology tools that improve teaching and learning.
+Early Childhood Educator|Teaches and cares for young children through play-based learning.
+Corporate Trainer|Trains employees in skills, processes and soft skills.
+Librarian|Organises information and helps people find and use it.
+Online Tutor|Teaches students one-to-one or in small groups over the internet.
+Academic Researcher|Carries out original research at a university or institute and publishes the findings.
+School Principal|Leads a school's teaching, staff, budget and community.
+Sustainability Consultant|Helps organisations reduce their environmental impact and report on sustainability.
+Renewable Energy Engineer|Designs and builds solar, wind and other clean energy systems.
+Robotics Engineer|Designs, builds and programs robots and automated systems.
+Space Technologist|Works on satellites, launch systems and space missions.
+Data Privacy Officer|Makes sure an organisation handles personal data lawfully and securely.
+Product Manager|Decides what a product should do and coordinates the teams that build it.
+Prompt Engineer|Designs and tests instructions for language-model tools so they give reliable results.
+Climate Analyst|Analyses climate data and models to assess risks and guide decisions.
+AR/VR Developer|Builds augmented-reality and virtual-reality experiences.
+Biomedical Engineer|Designs medical devices and equipment that support healthcare.
+Digital Forensics Analyst|Recovers and examines digital evidence for investigations.
+Esports Manager|Manages teams, events and sponsorships in competitive gaming.`;
+const TAGS_RAW=`Painter|CH
+Fine Artist|CH
+Illustrator|CT
+Photographer|CHT
+Art Teacher|CWP
+Writer|WC
+Journalist|WL
+Historian|WS
+Psychologist|PS
+Social Worker|PL
+Archaeologist|SH
+Translator|WT
+Research Scientist|SA
+Biotechnologist|SH
+Pharmacist|SP
+Environmental Scientist|SH
+Physicist|SA
+Chemist|SH
+Mathematician|AS
+Statistician|AT
+Laboratory Technologist|SH
+Astronomer|SA
+Geologist|SH
+Mechanical Engineer|HAT
+Chartered Accountant|AB
+Financial Analyst|AB
+Business Analyst|ABT
+Investment Banker|AB
+Entrepreneur|BL
+Marketing Manager|BC
+HR Professional|PB
+Banking Professional|AB
+Business Consultant|ABL
+Economist|AS
+Supply Chain Manager|BA
+Digital Marketer|BCT
+Software Developer|TA
+Full-Stack Developer|TC
+Web Developer|TC
+Mobile App Developer|TC
+Data Analyst|AT
+Data Scientist|ATS
+AI / ML Engineer|TAS
+Cybersecurity Analyst|TA
+Cloud / DevOps Engineer|TH
+Game Developer|TC
+Blockchain Developer|TA
+QA / Test Engineer|TA
+Embedded / IoT Engineer|TH
+UI/UX Designer|CT
+Graphic Designer|CT
+Animator|CT
+Fashion Designer|CH
+Interior Designer|CH
+Art Director|CL
+Video Editor|CT
+Film Director|CL
+Sound Designer|CT
+Content Creator|CW
+Product Designer|CHT
+Architect|CAH
+Electrician|HT
+Plumber|H
+Welder|H
+Carpenter|HC
+Automobile Technician|HT
+HVAC Technician|HT
+CNC Machinist|HT
+Chef|HC
+Beautician|HCP
+Solar Panel Installer|HT
+Drone Technician|HT
+Mechanic|HT
+Doctor|SP
+Nurse|PH
+Dentist|HP
+Physiotherapist|PH
+Medical Lab Technician|SH
+Nutritionist|PS
+Clinical Psychologist|PS
+Veterinarian|SPH
+Radiographer|TH
+Public Health Specialist|PSA
+Genetic Counsellor|SP
+Occupational Therapist|PH
+Lawyer|WLA
+Civil Servant|LW
+Police Officer|LH
+Judge|LA
+Diplomat|LW
+Defence Services Officer|LH
+Policy Analyst|AL
+Legal Advisor|WA
+Public Administrator|LA
+Fire Service Officer|LH
+Customs Officer|LA
+Urban Planner|ALC
+School Teacher|WP
+University Professor|WS
+Special Educator|PW
+Career Counsellor|PW
+Instructional Designer|WCT
+Education Technologist|TW
+Early Childhood Educator|PW
+Corporate Trainer|WP
+Librarian|WA
+Online Tutor|WT
+Academic Researcher|SW
+School Principal|LW
+Sustainability Consultant|SB
+Renewable Energy Engineer|THS
+Robotics Engineer|TH
+Space Technologist|TS
+Data Privacy Officer|TL
+Product Manager|BTL
+Prompt Engineer|TW
+Climate Analyst|SA
+AR/VR Developer|TC
+Biomedical Engineer|TS
+Digital Forensics Analyst|TA
+Esports Manager|BL`;
+const TAGNAMES={A:"Analytical and numbers",C:"Creative",P:"People and helping",H:"Hands-on",T:"Technology",B:"Business",S:"Science and research",W:"Writing, speaking and teaching",L:"Leadership and public service"};
+const SOFT={arts:["Creativity","Self-discipline","Handling feedback","Storytelling","Time management"],sci:["Curiosity","Attention to detail","Patience","Clear reporting","Teamwork in labs"],com:["Numeracy","Negotiation","Communication","Ethics and integrity","Time management"],cs:["Problem solving","Logical thinking","Continuous learning","Teamwork","Clear written communication"],des:["Creativity","Empathy for users","Presenting your work","Taking feedback","Meeting deadlines"],trade:["Safety awareness","Reliability","Customer handling","Precision","Physical stamina"],health:["Empathy","Calm under pressure","Ethics and confidentiality","Teamwork","Attention to detail"],law:["Public speaking","Integrity","Reading and writing precisely","Critical thinking","Resilience"],edu:["Patience","Explaining clearly","Empathy","Organisation","Adaptability"],new:["Curiosity","Adaptability","Systems thinking","Collaboration","Self-directed learning"]};
+const ROUTE={arts:"Many arts and humanities courses accept students from any stream. Where a subject is required (for example Psychology for some courses), check the exact rule on the institute's website, because it varies by university.",sci:"Science degrees usually ask for specific Class 12 subjects. If you studied another stream, check whether the course accepts your subjects, whether a bridge or additional-subject route exists (for example through an open school), or whether a related diploma or technician course is available.",com:"Commerce and business careers are open to graduates of most streams. Professional bodies such as the ones listed under official links publish the exact entry rules, including routes for students from other streams.",cs:"Technology careers are open to people from any stream. Employers care about skills and projects as well as degrees, so a portfolio and well-chosen courses can strengthen your case. Some degree programmes still ask for Mathematics at Class 12.",des:"Design and creative careers are largely portfolio-based and welcome applicants from any stream. Entrance tests for design colleges usually test drawing, aptitude and creativity rather than a particular stream.",trade:"Skilled trades have entry routes from Class 8 to 12 through ITI and similar training. Check the minimum education and trade list for the course you want; there is usually no stream requirement.",health:"Medical and allied health courses usually require specific science subjects (often Biology) at Class 12. If you studied another stream, check what additional-subject or bridge options your state and institute allow, and also look at health-related roles with different entry requirements.",law:"Law degrees and government exams are generally open to students from any stream. Check the age limits, attempt limits and degree requirements published by the conducting body.",edu:"Teaching careers depend on your subject knowledge and the required teaching qualification, not on one stream. Check the teacher-eligibility rules for the level you want to teach.",new:"Emerging careers combine skills from several fields. Look at which skills the role needs (for example programming, data, engineering or policy) and choose a degree or course that builds them, then add projects or internships."};
+const LINKS=[["NEET|JEE|CUET|UGC-NET|NET for","National Testing Agency (exam notices)","https://nta.ac.in/"],["UPSC","Union Public Service Commission","https://upsc.gov.in/"],["SSC","Staff Selection Commission","https://ssc.gov.in/"],["IBPS","IBPS (bank recruitment)","https://www.ibps.in/"],["CLAT|AILET","Consortium of National Law Universities (CLAT)","https://consortiumofnlus.ac.in/"],["ICAI|CA Foundation","The Institute of Chartered Accountants of India","https://www.icai.org/"],["National Medical Commission","National Medical Commission","https://www.nmc.org.in/"],["CAT","CAT (IIMs)","https://iimcat.ac.in/"],["NIFT","NIFT","https://www.nift.ac.in/"],["NID","National Institute of Design","https://www.nid.edu/"],["UCEED","UCEED (IIT Bombay)","https://www.uceed.iitb.ac.in/"],["NATA|Council of Architecture","National Aptitude Test in Architecture","https://www.nata.in/"],["FTII","Film and Television Institute of India","https://www.ftii.ac.in/"],["DGCA","Directorate General of Civil Aviation","https://dgca.gov.in/"],["ISRO","ISRO","https://www.isro.gov.in/"],["ITI|NCVT|NSDC|skill council","Skill India Digital Hub","https://www.skillindiadigital.gov.in/"],["NCHMCT","National Council for Hotel Management","https://nchmct.org/"],["Rehabilitation Council","Rehabilitation Council of India","https://rehabcouncil.nic.in/"],["Bar Council","Bar Council of India","https://www.barcouncilofindia.org/"]];
+const GENERAL_LINKS=[["National Career Service portal (jobs and career information)","https://www.ncs.gov.in/"],["SWAYAM (free online courses)","https://swayam.gov.in/"],["NPTEL (free course videos)","https://nptel.ac.in/"],["Skill India Digital Hub","https://www.skillindiadigital.gov.in/"]];
+const FREE={arts:[["Khan Academy: Arts and humanities","https://www.khanacademy.org/humanities"],["SWAYAM courses","https://swayam.gov.in/"]],sci:[["Khan Academy: Science","https://www.khanacademy.org/science"],["NPTEL courses","https://nptel.ac.in/"]],com:[["Khan Academy: Economics and finance","https://www.khanacademy.org/economics-finance-domain"],["SWAYAM courses","https://swayam.gov.in/"]],cs:[["freeCodeCamp","https://www.freecodecamp.org/"],["Kaggle Learn (data and machine learning)","https://www.kaggle.com/learn"],["NPTEL courses","https://nptel.ac.in/"]],des:[["Coursera (design courses)","https://www.coursera.org/"],["edX","https://www.edx.org/"]],trade:[["Skill India Digital Hub","https://www.skillindiadigital.gov.in/"],["National Career Service portal","https://www.ncs.gov.in/"]],health:[["Khan Academy: Health and medicine","https://www.khanacademy.org/science/health-and-medicine"],["NPTEL courses","https://nptel.ac.in/"]],law:[["Constitution of India (official text)","https://legislative.gov.in/constitution-of-india/"],["SWAYAM courses","https://swayam.gov.in/"]],edu:[["DIKSHA (teaching resources)","https://diksha.gov.in/"],["SWAYAM courses","https://swayam.gov.in/"]],new:[["NPTEL courses","https://nptel.ac.in/"],["Coursera","https://www.coursera.org/"]]};
+const QUIZ=[
+["On a free afternoon you would most like to","Draw, design or make something",{C:2,H:1},"Solve puzzles or work with numbers",{A:2,S:1},"Help or advise a friend",{P:2,W:1},"Build or fix something with tools",{H:2,T:1}],
+["Which school subjects do you enjoy most?","Maths and Physics",{A:2,T:1},"Biology and Chemistry",{S:2,P:1},"Languages, History or Civics",{W:2,L:1},"Art or Computer Science",{C:2,T:1}],
+["In a group project you usually","Lead and organise the work",{L:2,B:1},"Come up with ideas and designs",{C:2,W:1},"Do the detailed technical work",{T:2,A:1},"Make sure everyone is heard and supported",{P:2,L:1}],
+["Which work setting sounds best?","A lab or research centre",{S:2,A:1},"An office with business teams",{B:2,A:1},"A workshop, site or outdoors",{H:2,S:1},"A school, clinic or community space",{P:2,W:1}],
+["What matters most to you in a career?","Helping people directly",{P:2,S:1},"Earning well and growing fast",{B:2,L:1},"Creating something original",{C:2,W:1},"Solving hard problems",{A:2,T:1}],
+["How do you feel about computers?","I love building software or apps",{T:2,A:1},"I like using tech tools for my interests",{T:1,C:1},"I prefer working with people or things",{P:1,H:1},"I want to understand how machines work",{H:2,T:1}],
+["Which task would you pick?","Write an article or a speech",{W:2,C:1},"Analyse a spreadsheet of results",{A:2,B:1},"Plan an event or manage a team",{L:2,B:1},"Run an experiment and record results",{S:2,A:1}],
+["You feel most energised by","Talking and presenting ideas",{W:2,L:1},"Quiet, focused work",{A:2,S:1},"Hands-on activity",{H:2,C:1},"Meeting new people and helping them",{P:2,W:1}],
+["Choose a challenge","Start a small business",{B:2,L:1},"Design a poster or a short film",{C:2,T:1},"Find and fix a bug in a program",{T:2,A:1},"Organise a community drive",{L:2,P:1}],
+["How do you like to learn?","By reading and research",{S:2,W:1},"By practising with my hands",{H:2,C:1},"By discussing with other people",{W:2,P:1},"By solving problems step by step",{A:2,T:1}],
+["Which sounds most like you?","Curious about how nature and the body work",{S:2,P:1},"Interested in money, markets and deals",{B:2,A:1},"Interested in laws, rules and public life",{L:2,W:1},"Interested in art, style and storytelling",{C:2,W:1}],
+["What would make you proudest?","A discovery or an invention",{S:2,T:1},"A company or product I built",{B:2,T:1},"Improving someone's life",{P:2,S:1},"A masterpiece or a performance",{C:2,H:1}]];
+const BEH=["Tell me about yourself.","Why do you want to work in this field?","Describe a time you worked in a team and faced a disagreement.","Tell me about a time you failed and what you learned from it.","Describe a situation where you had to learn something quickly.","Give an example of a time you showed leadership.","How do you handle tight deadlines or pressure?","Tell me about a time you received critical feedback.","Describe a time you solved a problem in a creative way.","What is your biggest strength, and what are you working to improve?","Where do you see yourself in five years?","Why should we choose you?"];
+const FAQ=[["I have not decided my stream or course yet. Where do I start?","Start with what you enjoy and what you are good at. Take the career quiz, read two or three career pages that interest you, and compare them. Then talk to people who work in those fields. A choice is easier to change early than late."],["Does my school stream limit my options?","Often less than people think. Many degrees and exams accept any stream, but some courses require particular subjects. Each career page lists the typical requirement. Always confirm the current rule with the institute or exam body."],["Do I need coaching to prepare for an entrance exam?","It depends on the exam and on how you learn. Many people prepare with official syllabi, past papers and mock tests. Coaching can add structure and discipline for some people. Compare costs and results before you commit."],["What if I am weak at Mathematics?","Many careers need little advanced maths. Look at careers tagged for creativity, people or communication, and check what the course really asks for. Where maths is needed, steady practice from the basics helps more than cramming."],["How do I choose between two careers?","Use the compare tool. Look at the qualification length, entrance exam, cost, and the daily work. Then ask yourself which daily work you would enjoy for years, not only which title sounds better."],["Can I change my career later?","Yes. Many skills transfer between roles, and learning continues after your degree. Your progress here is kept when you switch goals, so you can return to an earlier plan."],["How much time should I give to preparation each week?","Choose an amount you can keep up. Steady weekly study beats occasional long sessions. Use the target date in My Plan to see how many stages you would need to finish each week."],["Should I add every skill to my resume?","Add only skills you can talk about and demonstrate. Employers often test what you list. Put the strongest and most relevant ones first."],["Is a project or portfolio really necessary?","For many careers, yes. A portfolio, a log of practical work or a few well-documented projects shows what you can do. Each roadmap includes a stage for building proof of your skills."],["How do I prepare for an interview?","Learn about the organisation, practise a short introduction, prepare two or three examples using the STAR method, and rehearse out loud. The Interview tab has practice questions and a checklist."],["What should I do if I fail an exam?","Review what went wrong, adjust your plan, and consider related routes. Many careers have more than one entry path. Talking to a teacher or counsellor can help you plan the next attempt."],["Where can I find official information on exams and jobs?","Use the official links on each career page and in the Toolkit. Dates, fees and eligibility change, so always confirm on the official website."]];
+const CHECKS={interview:["Read the job or course description again","Research the organisation and its recent work","Practise a 60-second introduction","Prepare two or three STAR examples","Prepare two questions to ask them","Keep copies of your resume and certificates ready","Plan your route or test your internet and camera","Choose neat, comfortable clothes","Arrive or log in ten minutes early","Send a short thank-you message afterwards"],resume:["One page for students and freshers (two for long careers)","Name, phone, email and a profile link at the top","Standard headings: Education, Skills, Projects, Experience","Bullets start with action verbs and show results","Numbers wherever you can (users, marks, time saved)","Dates and formatting are consistent","No spelling or grammar mistakes","Saved as PDF with a clear file name","Someone else has read it"],docs:["Identity proof","Mark sheets and certificates","Passport-size photographs","Resume (PDF) and portfolio link","Entrance exam admit card or scorecard","Category or income certificates, if applicable","Bank details for fees and scholarships","Copies of everything in a folder on your phone"]};
+const TIPS=["Small steps every day beat a big push once a month.","Write down what you learned today in two lines. Reviewing notes is faster than relearning.","Talk to one person who works in your target career this month.","Build one small project or practical piece before you feel ready.","Read the official notice for your exam twice, then make a checklist.","Practise explaining a topic out loud. If you can explain it, you know it.","Keep a folder of your best work. You will need it for applications.","Ask for feedback early. It saves time later.","Rest is part of preparation. Plan breaks and sleep.","Compare at least two careers before you decide.","Set a target date for your next stage and put it on a calendar.","Update your resume after every project or course.","Learn the basics of your field's key tools, not just the theory.","Join a study group or an online community and answer questions as well as asking them.","Track every application you send in the Toolkit tracker.","Revisit your goal every month. It is fine to adjust it.","Protect your focus: study in short blocks with no phone.","Read one article from your field each week.","Check official websites for dates. Social media posts are often outdated.","Celebrate finishing a stage."];
+
+/* ===================== Career Mentor: application code ===================== */
+const ICON={
+home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+compass:'<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+check:'<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+brief:'<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+right:'<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+left:'<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+printer:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+tick:'<polyline points="20 6 9 17 4 12"/>',
+ext:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+copy:'<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+flask:'<path d="M9 3h6"/><path d="M10 3v6.2L4.6 18.4A2 2 0 0 0 6.3 21h11.4a2 2 0 0 0 1.7-2.6L14 9.2V3"/><path d="M7.5 15h9"/>',
+chart:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+code:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+pen:'<path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>',
+tool:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+heart:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'};
+const CATICON={arts:"edit",sci:"flask",com:"chart",cs:"code",des:"pen",trade:"tool",health:"heart",law:"shield",edu:"book",new:"zap"};
+const ic=(n,s)=>{const e=document.createElement("span");e.className="ic";e.innerHTML='<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICON[n]||"")+'</svg>';return e};
+const $=(s,r)=>(r||document).querySelector(s);
+function el(tag,attrs,...kids){const e=document.createElement(tag);const a=attrs||{};
+ for(const k in a){const v=a[k];if(v===false||v==null||k==="value")continue;
+  if(k==="class")e.className=v;else if(k.slice(0,2)==="on")e.addEventListener(k.slice(2),v);else if(k==="checked")e.checked=!!v;else e.setAttribute(k,v===true?"":v)}
+ kids.flat(Infinity).forEach(c=>{if(c==null||c===false)return;e.append(c.nodeType?c:document.createTextNode(String(c)))});
+ if(a.value!=null)e.value=a.value;return e}
+const btn=(label,kind,fn,icon,extra)=>el("button",Object.assign({type:"button",class:"btn"+(kind?" "+kind:""),onclick:fn},extra||{}),icon?ic(icon,18):null,label);
+const pad2=n=>String(n).padStart(2,"0");
+const ymd=d=>d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+const today=()=>ymd(new Date());
+const isObj=v=>v&&typeof v==="object"&&!Array.isArray(v);
+const slug=s=>String(s||"profile").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"profile";
+const uid=()=>"p"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+/* ----- career data ----- */
+const CATEGORIES=CATS;
+const CAREERS=[];CATEGORIES.forEach(c=>c.careers.forEach(n=>CAREERS.push({name:n,cat:c})));
+const careerCat=n=>CATEGORIES.find(c=>c.careers.includes(n));
+const inCareers=n=>typeof n==="string"&&CAREERS.some(c=>c.name===n);
+const REC={};RAWREC.split("\n").forEach(l=>{const f=l.split("|");REC[f[0]]={elig:f[1],exam:f[2],t:(f[3]||"").split(";").filter(Boolean),prac:f[4]||"",cred:f[5]||""}});
+const DESC={};DESC_RAW.split("\n").forEach(l=>{const i=l.indexOf("|");DESC[l.slice(0,i)]=l.slice(i+1)});
+const TAGS={};TAGS_RAW.split("\n").forEach(l=>{const f=l.split("|");TAGS[f[0]]=f[1]});
+const NOCV=new Set("Painter|Fine Artist|Illustrator|Photographer|Entrepreneur|Content Creator|Esports Manager|Electrician|Plumber|Welder|Carpenter|Automobile Technician|HVAC Technician|CNC Machinist|Chef|Beautician|Solar Panel Installer|Drone Technician|Mechanic".split("|"));
+const NOIV=new Set("Painter|Fine Artist|Illustrator|Photographer|Entrepreneur|Content Creator".split("|"));
+const PH=["Phase 1: Foundations","Phase 2: Core skills","Phase 3: Placement preparation"];
+const catOf=c=>{const k=careerCat(c);return k?k.id:undefined};
+const GP={};
+function genPlan(c){if(GP[c])return GP[c];const r=REC[c],cat=catOf(c);
+const st=[["Understand the career",`Learn what a ${c} does day to day, where they work and the main specialisations. Talk to one working ${c} if you can.`,"1 week","You can explain the job in your own words.",["Read two career profiles","Watch a day-in-the-life video","Write down what attracts you to it"]],
+["Check eligibility and admission",`Typical route in India: ${r.elig}. Rules differ by institute and board, so confirm on the official website before you apply.`,"1-2 weeks","You know exactly which course or certificate you need.",["List three institutes or programmes","Note the fees and cut-offs","Check age and subject rules"]],
+["Prepare for selection or entrance",`${r.exam}. Collect the syllabus and past papers and make a study schedule.`,"varies","You have the syllabus and a weekly schedule.",["Download the syllabus","Solve two past papers"]]];
+r.t.forEach(t=>st.push(["Core topic: "+t,`Study ${t} from a recognised textbook, course or teacher. Make short notes and test yourself with practice questions.`,"3-6 weeks","You can explain it or solve questions without notes.",["Write a one-page summary","Do 20 practice questions or exercises"]]));
+st.push(["Hands-on practice",`Practical work: ${r.prac}. Keep a log of what you do and learn.`,"ongoing","You have a log of practice sessions.",["Log every session","Ask a mentor or peer for feedback"]]);
+st.push(["Build proof of your skills",PROOF[cat]||PROOF.new,"3-4 weeks","You have something concrete to show.",[]]);
+st.push(["Credentials and registration",`Credential: ${r.cred}. Check the exact requirements with the official body.`,"varies","You know what you must earn and by when.",[]]);
+st.push(["Choose a speciality and first role","Pick the area you enjoy most and look for entry-level roles, apprenticeships or further study in it.","2-3 weeks","You have a shortlist of first steps.",[]]);
+return GP[c]=st.concat(NOCV.has(c)?COMMON2:COMMON)}
+
+const stepsOf=c=>PLAN[c]?PLAN[c].concat(COMMON):(REC[c]&&REC[c].t.length?genPlan(c):[]);
+const topicsOf=c=>{const r=REC[c];if(r&&r.t.length)return r.t;return (PLAN[c]||[]).slice(0,10).map(x=>x[0])};
+
+/* ----- state and storage ----- */
+let profiles=[],activeId=null,D=null,tab="home",keepSub=false,storeOK=true,savedLabel="",saveTimer=null,delAsk=null,pickMsg="";
+let X={mode:"browse",cat:null,car:null,q:"",ask:null};
+let QZ={i:0,ans:[],pts:{},view:"intro"};
+let CMP=[];
+let RS="ats",AT={text:"",jd:"",res:null,msg:"",cls:"muted"};
+let IM="tech",IQ={tech:0,beh:0},IFB=null,IANS={tech:"",beh:""};
+let PLAN_ASK=null,NOTICE="";
+const CUR=()=>D&&D.role;
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){storeOK=false;return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){storeOK=false;return false}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const defData=name=>({v:1,name:name,role:"",goals:[],done:{},log:[],notes:{},skills:{},short:[],quiz:null,apps:[],checks:{},target:{},resume:{},practiced:0,ats:null,created:Date.now()});
+function loadProfiles(){let p=[];try{p=JSON.parse(LS.get("cm.profiles")||"[]")}catch(e){}profiles=Array.isArray(p)?p.filter(x=>x&&typeof x.id==="string"&&typeof x.name==="string"):[];activeId=LS.get("cm.active")}
+const saveProfiles=()=>LS.set("cm.profiles",JSON.stringify(profiles));
+const pname=id=>(profiles.find(p=>p.id===id)||{}).name||"Learner";
+function openProfile(id){let d=null;try{d=JSON.parse(LS.get("cm.d."+id)||"null")}catch(e){}
+ D=Object.assign(defData(pname(id)),isObj(d)?d:{});
+ if(!isObj(D.done))D.done={};if(!Array.isArray(D.goals))D.goals=[];if(!Array.isArray(D.short))D.short=[];if(!Array.isArray(D.log))D.log=[];if(!isObj(D.notes))D.notes={};if(!isObj(D.skills))D.skills={};if(!Array.isArray(D.apps))D.apps=[];if(!isObj(D.checks))D.checks={};if(!isObj(D.target))D.target={};if(!isObj(D.resume))D.resume={};
+ activeId=id;LS.set("cm.active",id)}
+function setSaved(t){savedLabel=t;const s=$("#savedLbl");if(s)s.textContent=t}
+function flush(){clearTimeout(saveTimer);if(!D||!activeId)return;const ok=LS.set("cm.d."+activeId,JSON.stringify(D));setSaved(ok?"Saved":"Not saved");}
+function save(){setSaved("Saving…");clearTimeout(saveTimer);saveTimer=setTimeout(flush,250)}
+function createProfile(name){const id=uid();profiles.push({id:id,name:name});saveProfiles();D=defData(name);activeId=id;LS.set("cm.active",id);LS.set("cm.d."+id,JSON.stringify(D));tab="home";history.replaceState(null,"",location.pathname+location.search)}
+function leaveProfile(){flush();D=null;activeId=null;LS.del("cm.active");tab="home";X={mode:"browse",cat:null,car:null,q:"",ask:null};render();scrollTo(0,0)}
+function deleteProfile(id){profiles=profiles.filter(p=>p.id!==id);saveProfiles();LS.del("cm.d."+id);if(activeId===id){D=null;activeId=null;LS.del("cm.active")}delAsk=null}
+const first=()=>(D.name||"").trim().split(/\s+/)[0]||"there";
+
+/* ----- progress helpers ----- */
+const doneN=c=>stepsOf(c).filter((_,i)=>D.done[c+i]).length;
+const pctOf=c=>{const n=stepsOf(c).length;return n?Math.round(doneN(c)/n*100):0};
+function streak(){const days=new Set(D.log.map(l=>l.d));let n=0;const d=new Date();if(!days.has(ymd(d)))d.setDate(d.getDate()-1);while(days.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+const need=()=>{const r=D&&D.role;return{cv:!!r&&!NOCV.has(r),iv:!!r&&!NOIV.has(r)}};
+const TABS=[["home","Home","home"],["explore","Explore","compass"],["plan","My Plan","check"],["resume","Resume","file"],["interview","Interview","chat"],["toolkit","Toolkit","brief"]];
+const tabsList=()=>{const n=need();return TABS.filter(t=>t[0]==="resume"?n.cv:t[0]==="interview"?n.iv:true)};
+
+/* ----- navigation ----- */
+function resetSub(){X={mode:"browse",cat:null,car:null,q:"",ask:null};PLAN_ASK=null}
+function go(t,keep){keepSub=!!keep;if(location.hash==="#"+t){tab=t;if(!keep)resetSub();keepSub=false;render();scrollTo(0,0)}else location.hash="#"+t}
+window.addEventListener("hashchange",()=>{const t=location.hash.slice(1);if(TABS.some(x=>x[0]===t)){tab=t;if(!keepSub)resetSub();keepSub=false;render();scrollTo(0,0)}});
+function openCareer(n){X.mode="browse";X.car=n;X.cat=(careerCat(n)||{}).id||null;X.ask=null;if(tab!=="explore")go("explore",true);else{render();scrollTo(0,0)}}
+function openCategory(id){X.mode="browse";X.car=null;X.cat=id;X.q="";if(tab!=="explore")go("explore",true);else{render();scrollTo(0,0)}}
+function startQuiz(){X.mode="quiz";if(QZ.view==="q"||QZ.view==="done"){}else QZ={i:0,ans:[],pts:{},view:"intro"};if(tab!=="explore")go("explore",true);else{render();scrollTo(0,0)}}
+
+/* ----- printing ----- */
+function printNode(node){const pr=$("#printRoot");pr.replaceChildren(node);document.body.classList.add("printing");
+ const done=()=>{document.body.classList.remove("printing");pr.replaceChildren();window.removeEventListener("afterprint",done)};
+ window.addEventListener("afterprint",done);setTimeout(()=>window.print(),60)}
+
+/* ----- shared UI pieces ----- */
+const chip=t=>el("span",{class:"chip"},t);
+const link=(label,url)=>el("a",{href:url,target:"_blank",rel:"noopener noreferrer"},label," ",ic("ext",14));
+function ringEl(p){const r=el("div",{class:"ring",role:"img","aria-label":p+" percent complete"},el("b",{},p+"%"));r.style.setProperty("--p",p);return r}
+function careerItem(n){const cat=careerCat(n);return el("button",{type:"button",class:"item",onclick:()=>openCareer(n)},el("span",{class:"t"},el("span",{},n),D.short.includes(n)?el("span",{class:"star","aria-label":"Saved"},ic("star",16)):null),el("span",{class:"d"},DESC[n]||""),el("span",{class:"tiny muted"},cat?cat.name:""))}
+function catCard(c){const e=el("button",{type:"button",class:"cat",onclick:()=>openCategory(c.id)},el("span",{class:"badge"},ic(CATICON[c.id]||"compass",24)),el("b",{},c.name),el("span",{class:"small muted"},c.desc),el("span",{class:"tiny muted"},c.careers.length+" careers"),el("span",{class:"go"},"Explore careers",ic("right",16)));e.style.setProperty("--c",c.color);return e}
+const streamsGrid=()=>el("div",{class:"cats"},CATEGORIES.map(catCard));
+function toggleSave(n){const i=D.short.indexOf(n);if(i>=0)D.short.splice(i,1);else D.short.push(n);save();render()}
+
+/* ----- top bar and render ----- */
+function renderTop(){const u=$("#user"),t=$("#tabs");u.replaceChildren();t.replaceChildren();
+ if(!D){t.hidden=true;return}
+ t.hidden=false;
+ u.append(el("span",{class:"nm"},D.name),el("span",{class:"tiny",id:"savedLbl",role:"status"},savedLabel),
+  el("button",{type:"button",class:"btn sec sm",onclick:leaveProfile,"aria-label":"Switch profile"},ic("user",16),el("span",{class:"lbl"},"Switch profile")));
+ tabsList().forEach(([k,l,i])=>t.append(el("button",{type:"button",class:"tab","aria-current":tab===k?"page":false,onclick:()=>go(k)},ic(i,20),el("span",{},l))))}
+function render(){renderTop();const root=$("#app");root.replaceChildren();
+ if(!storeOK)root.append(el("div",{class:"banner",role:"alert"},"Your browser is blocking storage, so your progress cannot be saved. Allow site data for this page or leave private browsing."));
+ if(NOTICE){root.append(el("div",{class:"banner good",role:"status"},NOTICE));NOTICE=""}
+ if(!D){root.append(picker());document.title="Career Mentor";return}
+ if(!tabsList().some(t=>t[0]===tab))tab="home";
+ root.append({home:home,explore:explore,plan:plan,resume:resume,interview:interview,toolkit:toolkit}[tab]());
+ document.title=(tab==="home"?"":TABS.find(t=>t[0]===tab)[1]+" · ")+"Career Mentor"}
+
+/* ----- profile picker (first screen) ----- */
+function picker(){const w=el("div",{class:"wrap stack"}),hasP=profiles.length>0;
+ w.append(el("div",{class:"hero"},el("h1",{},"Find your career. Plan every step."),el("p",{},"Explore "+CAREERS.length+" careers, take a short interest quiz, follow a step-by-step roadmap, and prepare your resume and interviews. Everything runs in your browser: no sign-up, and nothing is uploaded.")));
+ const g=el("div",{class:"grid g2"});
+ if(hasP){const list=el("div",{class:"stack"});
+  profiles.forEach(p=>{list.append(el("div",{class:"row sp"},
+   el("button",{type:"button",class:"btn sec",style:"flex:1;justify-content:flex-start",onclick:()=>{openProfile(p.id);const h=location.hash.slice(1);tab=TABS.some(t=>t[0]===h)?h:"home";render();scrollTo(0,0)}},ic("user",18),p.name),
+   delAsk===p.id?el("span",{class:"row"},el("span",{class:"small bad"},"Delete this profile and its data?"),btn("Yes, delete","danger sm",()=>{deleteProfile(p.id);render()}),btn("Cancel","sec sm",()=>{delAsk=null;render()})):
+   el("button",{type:"button",class:"btn sec sm","aria-label":"Delete profile "+p.name,onclick:()=>{delAsk=p.id;render()}},ic("trash",16))))});
+  g.append(el("div",{class:"card"},el("h2",{},"Who is using Career Mentor?"),el("p",{class:"muted small"},"Choose your profile to continue where you left off."),list))}
+ const nm=el("input",{id:"pn",type:"text",maxlength:"40",autocomplete:"name",placeholder:"For example: Ananya Sharma"}),err=el("p",{class:"small bad",role:"alert"},pickMsg);
+ const make=()=>{const n=nm.value.trim().replace(/\s+/g," ");
+  if(n.length<2){err.textContent="Please enter your name (at least 2 letters).";return}
+  if(profiles.some(p=>p.name.toLowerCase()===n.toLowerCase())){err.textContent="A profile with this name already exists. Open it from the list or use a different name.";return}
+  pickMsg="";createProfile(n);render();scrollTo(0,0)};
+ nm.addEventListener("keydown",e=>{if(e.key==="Enter")make()});
+ g.append(el("div",{class:"card"},el("h2",{},hasP?"Add a new profile":"Create your profile"),el("p",{class:"muted small"},"A profile keeps your goals, plan progress, notes and saved careers on this device."),el("label",{for:"pn"},"Your name"),nm,err,el("div",{class:"row",style:"margin-top:12px"},btn(hasP?"Add profile":"Get started","",make,"plus"))));
+ w.append(g);
+ const msg=el("p",{class:"small",role:"status"}),fi=el("input",{type:"file",id:"rf",accept:"application/json,.json","aria-label":"Choose a backup file"});
+ fi.addEventListener("change",async()=>{const f=fi.files&&fi.files[0];if(!f)return;const r=await importFile(f);msg.className="small "+(r.ok?"ok":"bad");msg.textContent=r.msg;fi.value="";if(r.ok){render();scrollTo(0,0)}});
+ w.append(el("details",{class:"card"},el("summary",{},"Restore from a backup file"),el("p",{class:"muted small"},"If you saved a backup from the Toolkit, choose the file to restore it as a new profile."),fi,msg));
+ w.append(el("p",{class:"tiny muted"},"Your data stays in this browser. Clearing your browser data removes it, so save a backup from the Toolkit now and then."));
+ return w}
+
+/* ----- home ----- */
+const stat=(n,l)=>el("div",{class:"card stat"},el("b",{},n),el("span",{},l));
+function home(){const w=el("div",{class:"wrap stack"}),c=D.role;
+ const acts=c?[btn("Continue my plan","",()=>go("plan"),"right"),btn("Explore careers","sec",()=>go("explore"))]:[btn("Take the career quiz","",startQuiz,"target"),btn("Browse careers","sec",()=>go("explore"))];
+ w.append(el("div",{class:"hero"},el("h1",{},"Welcome, "+first()+"."),el("p",{},c?"Your goal is "+c+". Keep going, one stage at a time.":"Find the career that fits you. Start with the short interest quiz, or browse careers by stream."),el("div",{class:"row"},acts)));
+ const total=Object.values(D.done).filter(Boolean).length;
+ w.append(el("div",{class:"grid g4"},stat(total,"Stages completed"),stat(streak(),"Day streak"),stat(D.short.length,"Saved careers"),stat(D.apps.length,"Applications tracked")));
+ const g=el("div",{class:"grid g2"});
+ if(c){const s=stepsOf(c),n=s.findIndex((_,i)=>!D.done[c+i]),p=pctOf(c);
+  g.append(el("div",{class:"card"},el("div",{class:"row"},ringEl(p),el("div",{style:"flex:1;min-width:200px"},chip((careerCat(c)||{}).name||"Career"),el("h2",{style:"margin:6px 0"},c),el("p",{class:"small muted",style:"margin:0"},n<0?"All stages complete. Keep practising and applying.":"Next: Stage "+(n+1)+" of "+s.length+", "+s[n][0]))),el("div",{class:"bar",style:"margin-top:14px"},el("i",{style:"width:"+p+"%"})),el("div",{class:"row",style:"margin-top:14px"},btn("Open my plan","sec",()=>go("plan")),btn("Career details","ghost",()=>openCareer(c)))))}
+ else g.append(el("div",{class:"card"},el("h2",{},"Choose a goal"),el("p",{class:"muted"},"Open any career and choose Set as my goal. You get a step-by-step roadmap with tasks, notes and progress tracking."),el("div",{class:"row"},btn("Take the quiz","",startQuiz,"target"),btn("Browse careers","sec",()=>go("explore")))));
+ const side=el("div",{class:"stack"});
+ side.append(el("div",{class:"card"},el("h3",{},"Tip of the day"),el("p",{style:"margin:6px 0 0"},TIPS[Math.floor(Date.now()/864e5)%TIPS.length])));
+ if(D.short.length)side.append(el("div",{class:"card"},el("h3",{},"Saved careers"),el("div",{class:"chips",style:"margin-top:8px"},D.short.map(n=>el("button",{type:"button",class:"chip",onclick:()=>openCareer(n)},n)))));
+ if(D.log.length)side.append(el("div",{class:"card"},el("h3",{},"Recent activity"),el("ul",{class:"small",style:"margin:8px 0 0;padding-left:18px"},D.log.slice(-4).reverse().map(l=>el("li",{},l.t+" ("+l.g+", "+l.d+")")))));
+ g.append(side);w.append(g);
+ w.append(el("h2",{},"Explore by stream"),streamsGrid());
+ return w}
+
+/* ----- explore ----- */
+function explore(){const w=el("div",{class:"wrap stack"});
+ w.append(el("div",{class:"row sp"},el("h1",{},"Explore careers"),el("div",{class:"seg",role:"group","aria-label":"Explore mode"},[["browse","Browse"],["quiz","Career quiz"],["compare","Compare"]].map(([k,l])=>el("button",{type:"button","aria-pressed":X.mode===k?"true":"false",onclick:()=>{X.mode=k;render()}},l)))));
+ w.append({browse:browse,quiz:quizView,compare:compareView}[X.mode]());return w}
+function browse(){if(X.car)return careerView(X.car);
+ const box=el("div",{class:"stack"}),res=el("div",{class:"stack"});
+ const search=el("input",{type:"search",id:"cs","aria-label":"Search careers",placeholder:"Search "+CAREERS.length+" careers, for example doctor, designer or electrician",value:X.q});
+ const fill=()=>{res.replaceChildren();const q=X.q.trim().toLowerCase();
+  if(q){const hits=CAREERS.filter(c=>c.name.toLowerCase().includes(q)||(DESC[c.name]||"").toLowerCase().includes(q)||c.cat.name.toLowerCase().includes(q));
+   res.append(el("p",{class:"muted small",role:"status"},hits.length+(hits.length===1?" career found":" careers found")),hits.length?el("div",{class:"list"},hits.map(h=>careerItem(h.name))):el("div",{class:"card empty"},el("p",{},"No careers match that search. Try a different word or browse by stream.")))}
+  else if(X.cat){const c=CATEGORIES.find(x=>x.id===X.cat);
+   const b=el("span",{class:"badge"},ic(CATICON[c.id],24));b.style.setProperty("--c",c.color);
+   res.append(el("div",{},btn("All streams","ghost",()=>{X.cat=null;fill()},"left")),el("div",{class:"row"},b,el("div",{},el("h2",{},c.name),el("p",{class:"muted",style:"margin:0"},c.desc))),el("div",{class:"list"},c.careers.map(careerItem)))}
+  else res.append(streamsGrid())};
+ search.addEventListener("input",()=>{X.q=search.value;fill()});fill();
+ box.append(el("div",{class:"card"},el("label",{for:"cs",style:"margin-top:0"},"Search careers"),search),res);return box}
+function setGoal(n,sw){if(!D.goals.includes(n))D.goals.push(n);if(sw)D.role=n;X.ask=null;save();render()}
+function linksFor(n){const r=REC[n],txt=[r.elig,r.exam,r.cred].join(" "),out=[];
+ LINKS.forEach(([re,label,url])=>{if(new RegExp("\\b("+re+")\\b").test(txt)&&!out.some(o=>o[1]===url))out.push([label,url])});return out}
+function careerView(n){const cat=careerCat(n),r=REC[n],isGoal=D.role===n,saved=D.short.includes(n),steps=stepsOf(n),w=el("div",{class:"stack"});
+ w.append(el("div",{},btn("All careers","ghost",()=>{X.car=null;X.ask=null;render();scrollTo(0,0)},"left")));
+ const head=el("div",{class:"card"});
+ head.append(el("div",{class:"row"},chip(cat.name),isGoal?chip("Your current goal"):null),el("h1",{style:"margin:8px 0"},n),el("p",{class:"muted",style:"max-width:70ch"},DESC[n]));
+ const acts=el("div",{class:"row"});
+ acts.append(el("button",{type:"button",class:"btn sec","aria-pressed":saved?"true":"false",onclick:()=>toggleSave(n)},ic("star",18),saved?"Saved":"Save career"));
+ if(isGoal)acts.append(btn("Open my plan","",()=>go("plan"),"right"));
+ else if(D.goals.includes(n))acts.append(btn("Make this my current goal","",()=>setGoal(n,true),"target"));
+ else acts.append(btn("Set as my goal","",()=>{if(D.role){X.ask=n;render()}else setGoal(n,true)},"target"));
+ head.append(acts);
+ if(X.ask===n&&!isGoal)head.append(el("div",{class:"card",style:"margin-top:14px"},el("p",{style:"margin-bottom:10px"},"Your current goal is "+D.role+". What would you like to do?"),el("div",{class:"row"},btn("Switch to "+n,"",()=>setGoal(n,true)),btn("Add as an extra goal","sec",()=>setGoal(n,false)),btn("Cancel","ghost",()=>{X.ask=null;render()})),el("p",{class:"tiny muted",style:"margin:10px 0 0"},"Your progress on every goal is kept.")));
+ w.append(head);
+ const g=el("div",{class:"grid g2 wide"});
+ g.append(el("div",{class:"card"},el("h3",{},"At a glance"),el("dl",{class:"kv"},el("dt",{},"Stream"),el("dd",{},cat.name),el("dt",{},"Typical qualification"),el("dd",{},r.elig),el("dt",{},"Entrance or selection"),el("dd",{},r.exam),el("dt",{},"Credential or licence"),el("dd",{},r.cred||"Not required for most roles"),el("dt",{},"Roadmap"),el("dd",{},steps.length+" stages"))));
+ const study=el("div",{class:"card"},el("h3",{},r.t.length?"What you will study":"Roadmap focus areas"),el("ul",{style:"margin:8px 0 0;padding-left:20px"},topicsOf(n).map(t=>el("li",{},t))));
+ if(r.prac)study.append(el("p",{class:"small",style:"margin:12px 0 0"},el("b",{},"Hands-on practice: "),r.prac));
+ g.append(study);w.append(g);
+ const g2=el("div",{class:"grid g2"});
+ g2.append(el("div",{class:"card"},el("h3",{},"Skills to build"),el("p",{class:"tiny muted",style:"margin:8px 0 4px"},"Core knowledge"),el("div",{class:"chips"},topicsOf(n).map(chip)),el("p",{class:"tiny muted",style:"margin:14px 0 4px"},"Personal skills"),el("div",{class:"chips"},(SOFT[cat.id]||[]).map(chip))));
+ g2.append(el("div",{class:"card"},el("h3",{},"If you studied a different stream"),el("p",{style:"margin:8px 0 0"},ROUTE[cat.id]||"")));
+ w.append(g2);
+ const g3=el("div",{class:"grid g2"});
+ g3.append(el("div",{class:"card"},el("h3",{},"Your roadmap at a glance"),el("ol",{style:"margin:8px 0 0;padding-left:22px"},steps.map(s=>el("li",{},s[0])))));
+ const lk=linksFor(n),lc=el("div",{class:"card"},el("h3",{},"Official links and free learning"),el("p",{class:"tiny muted",style:"margin:6px 0 8px"},"These open external websites. Check them for current dates, fees and rules."),el("ul",{style:"margin:0;padding-left:20px"},lk.map(x=>el("li",{},link(x[0],x[1]))),(FREE[cat.id]||[]).map(x=>el("li",{},link(x[0],x[1]))),GENERAL_LINKS.map(x=>el("li",{},link(x[0],x[1])))));
+ g3.append(lc);w.append(g3);
+ const idx=cat.careers.indexOf(n),sim=[];for(let i=1;i<cat.careers.length&&sim.length<6;i++)sim.push(cat.careers[(idx+i)%cat.careers.length]);
+ w.append(el("div",{class:"card"},el("h3",{},"Similar careers"),el("div",{class:"chips",style:"margin-top:10px"},sim.map(s=>el("button",{type:"button",class:"chip",onclick:()=>openCareer(s)},s)))),el("p",{class:"tiny muted"},"This guide is a starting point. Rules, fees and dates change, so confirm everything on the official website before you decide or apply."));
+ return w}
+
+/* ----- career quiz ----- */
+function quizScores(pts){const mx=Math.max(1,...Object.values(pts)),wt=[1,.8,.6];
+ const rows=CAREERS.map(c=>{const tg=(TAGS[c.name]||"").split("");let s=0,den=0;tg.forEach((t,i)=>{s+=(pts[t]||0)*wt[i];den+=wt[i]*mx});return{name:c.name,cat:c.cat,pct:den?Math.round(100*s/den):0,tags:tg}});
+ rows.sort((a,b)=>b.pct-a.pct||a.name.localeCompare(b.name));return rows}
+const ptsOf=ans=>{const p={};ans.forEach((k,i)=>{const o=QUIZ[i][2+k*2];for(const t in o)p[t]=(p[t]||0)+o[t]});return p};
+function quizView(){const box=el("div",{class:"stack"});
+ if(QZ.view==="intro"){box.append(el("div",{class:"card"},el("h2",{},"Career interest quiz"),el("p",{class:"muted",style:"max-width:65ch"},"Answer "+QUIZ.length+" short questions about what you enjoy. You get a ranked list of careers to explore. It takes about three minutes. The result is a suggestion to start your research, not a verdict."),el("div",{class:"row"},btn("Start the quiz","",()=>{QZ={i:0,ans:[],pts:{},view:"q"};render()},"target"),D.quiz?btn("See my last result","sec",()=>{QZ={i:0,ans:[],pts:Object.assign({},D.quiz.pts),view:"done"};render()}):null)));return box}
+ if(QZ.view==="q"){const q=QUIZ[QZ.i],opts=el("div",{class:"opts"});
+  for(let k=0;k<4;k++){const label=q[1+k*2],pts=q[2+k*2];opts.append(el("button",{type:"button",class:"opt",onclick:()=>{QZ.ans[QZ.i]=k;QZ.ans.length=QZ.i+1;if(QZ.i<QUIZ.length-1){QZ.i++;render();scrollTo(0,0)}else{QZ.pts=ptsOf(QZ.ans);const rows=quizScores(QZ.pts);D.quiz={date:today(),pts:Object.assign({},QZ.pts),top:rows.slice(0,8).map(r=>r.name)};save();QZ.view="done";render();scrollTo(0,0)}}},label))}
+  const bar=el("div",{class:"bar","aria-hidden":"true"},el("i",{style:"width:"+Math.round(QZ.i/QUIZ.length*100)+"%"}));
+  box.append(el("div",{class:"card"},el("p",{class:"muted small",style:"margin-bottom:8px"},"Question "+(QZ.i+1)+" of "+QUIZ.length),bar,el("div",{class:"q"},q[0]),opts,el("div",{class:"row",style:"margin-top:14px"},QZ.i>0?btn("Previous question","ghost",()=>{QZ.i--;render()},"left"):null,btn("Cancel quiz","ghost",()=>{QZ.view="intro";render()}))));
+  return box}
+ // results
+ const rows=quizScores(QZ.pts),top=rows.slice(0,8),tagTop=Object.keys(QZ.pts).sort((a,b)=>QZ.pts[b]-QZ.pts[a]).slice(0,3);
+ const byCat=CATEGORIES.map(c=>{const r=rows.filter(x=>x.cat.id===c.id).slice(0,3);return{c:c,v:Math.round(r.reduce((a,x)=>a+x.pct,0)/Math.max(1,r.length))}}).sort((a,b)=>b.v-a.v).slice(0,3);
+ box.append(el("div",{class:"card"},el("h2",{},"Your interest profile"),el("p",{class:"muted"},"You scored highest on:"),el("div",{class:"chips",style:"margin-bottom:14px"},tagTop.map(t=>chip(TAGNAMES[t]))),el("h3",{},"Streams to look at first"),el("div",{class:"stack",style:"margin-top:10px"},byCat.map(x=>el("div",{},el("div",{class:"row sp small"},el("b",{},x.c.name),el("span",{class:"muted"},x.v+"% interest match")),el("div",{class:"bar"},el("i",{style:"width:"+x.v+"%"})))))));
+ box.append(el("h3",{},"Careers that match your answers"),el("div",{class:"list"},top.map(r=>{const lbl=r.pct>=80?"Strong match":r.pct>=60?"Good match":"Worth exploring";
+  return el("div",{class:"item"},el("span",{class:"t"},el("span",{},r.name),el("span",{class:"chip"},lbl)),el("span",{class:"d"},DESC[r.name]),el("span",{class:"tiny muted"},r.cat.name+" · "+r.pct+"% interest match"),el("div",{class:"row",style:"margin-top:8px"},btn("View career","sec sm",()=>openCareer(r.name)),el("button",{type:"button",class:"btn sec sm","aria-pressed":D.short.includes(r.name)?"true":"false",onclick:()=>toggleSave(r.name)},ic("star",16),D.short.includes(r.name)?"Saved":"Save")))})));
+ box.append(el("div",{class:"row"},btn("Retake the quiz","sec",()=>{QZ={i:0,ans:[],pts:{},view:"q"};render()}),btn("Compare saved careers","ghost",()=>{CMP=D.short.slice(0,3);X.mode="compare";render()})),el("p",{class:"tiny muted"},"Your answers only measure interests. Check the qualification, cost and daily work of each career before you decide."));
+ return box}
+
+/* ----- compare ----- */
+function compareView(){const box=el("div",{class:"stack"});
+ const sel=el("select",{id:"cmpSel","aria-label":"Choose a career to compare"});sel.append(el("option",{value:""},"Choose a career…"));
+ CATEGORIES.forEach(c=>{const g=el("optgroup",{label:c.name});c.careers.forEach(n=>g.append(el("option",{value:n},n)));sel.append(g)});
+ const msg=el("p",{class:"small muted",role:"status"},"Compare up to three careers side by side.");
+ const add=()=>{const v=sel.value;if(!v)return;if(CMP.includes(v)){msg.textContent=v+" is already in the comparison.";return}if(CMP.length>=3){msg.textContent="You can compare up to three careers. Remove one first.";return}CMP.push(v);render()};
+ box.append(el("div",{class:"card"},el("div",{class:"row"},el("div",{style:"flex:1;min-width:220px"},sel),btn("Add to comparison","",add,"plus")),D.short.length?el("div",{class:"row",style:"margin-top:12px"},el("span",{class:"small muted"},"Saved:"),D.short.map(n=>el("button",{type:"button",class:"chip",onclick:()=>{if(!CMP.includes(n)&&CMP.length<3){CMP.push(n);render()}}},n))):null,msg));
+ if(!CMP.length){box.append(el("div",{class:"card empty"},el("p",{},"Add two or three careers to see their qualifications, entrance routes and core topics side by side.")));return box}
+ const rows=[["Stream",c=>careerCat(c).name],["Typical qualification",c=>REC[c].elig],["Entrance or selection",c=>REC[c].exam],["Core topics",c=>topicsOf(c).join(", ")],["Hands-on practice",c=>REC[c].prac||"Built into the roadmap stages"],["Credential or licence",c=>REC[c].cred||"Not required for most roles"],["Roadmap length",c=>stepsOf(c).length+" stages"]];
+ const t=el("table",{class:"tbl"},el("thead",{},el("tr",{},el("th",{},""),CMP.map(c=>el("th",{},el("div",{class:"row sp"},el("span",{},c),el("button",{type:"button",class:"btn ghost sm","aria-label":"Remove "+c,onclick:()=>{CMP=CMP.filter(x=>x!==c);render()}},ic("x",16))))))),el("tbody",{},rows.map(([l,f])=>el("tr",{},el("th",{scope:"row"},l),CMP.map(c=>el("td",{},f(c)))))));
+ box.append(el("div",{class:"scroll"},t),el("div",{class:"row"},CMP.map(c=>btn("Open "+c,"sec sm",()=>openCareer(c)))));return box}
+
+/* ----- my plan ----- */
+function plan(){const w=el("div",{class:"wrap stack"}),c=D.role;
+ if(!c){w.append(el("h1",{},"My Plan"),el("div",{class:"card empty"},el("h2",{},"No goal chosen yet"),el("p",{class:"muted"},"Pick a career to get a step-by-step roadmap with tasks, notes and progress tracking."),el("div",{class:"row",style:"justify-content:center"},btn("Take the career quiz","",startQuiz,"target"),btn("Browse careers","sec",()=>go("explore")))));return w}
+ const steps=stepsOf(c),n=steps.length,dn=doneN(c),p=pctOf(c),cat=careerCat(c),nextI=steps.findIndex((_,i)=>!D.done[c+i]);
+ w.append(el("h1",{},"My Plan"),el("div",{class:"row sp"},el("div",{class:"seg",role:"group","aria-label":"My goals"},D.goals.map(g=>el("button",{type:"button","aria-pressed":g===c?"true":"false",onclick:()=>{D.role=g;PLAN_ASK=null;save();render()}},g))),btn("Add a goal","sec sm",()=>go("explore"),"plus")));
+ const rm=PLAN_ASK===c?el("span",{class:"row"},el("span",{class:"small bad"},"Remove this goal from your list? Your progress is kept."),btn("Yes, remove","danger sm",()=>{D.goals=D.goals.filter(g=>g!==c);D.role=D.goals[0]||"";PLAN_ASK=null;save();render()}),btn("Cancel","sec sm",()=>{PLAN_ASK=null;render()})):btn("Remove goal","danger sm",()=>{PLAN_ASK=c;render()},"trash");
+ w.append(el("div",{class:"card"},el("div",{class:"row"},ringEl(p),el("div",{style:"flex:1;min-width:220px"},chip(cat?cat.name:"Career"),el("h2",{style:"margin:6px 0"},c),el("p",{class:"small muted",style:"margin:0"},dn+" of "+n+" stages complete"+(nextI>=0?". Next: "+steps[nextI][0]:". Well done!")))),el("div",{class:"bar",style:"margin-top:14px"},el("i",{style:"width:"+p+"%"})),el("div",{class:"row",style:"margin-top:14px"},btn("Career details","sec sm",()=>openCareer(c)),btn("Print my plan","sec sm",printPlan,"printer"),rm)));
+ const g=el("div",{class:"grid g2"});g.append(targetCard(c,n,dn),skillsCard(c));w.append(g);
+ w.append(el("h2",{},"Your roadmap"),stageList(c,steps));
+ const ta=el("textarea",{id:"notes","aria-label":"My notes for "+c,placeholder:"Write notes, questions, deadlines and ideas for "+c+"…",value:D.notes[c]||"",style:"min-height:140px"});
+ ta.addEventListener("input",()=>{D.notes[c]=ta.value;save()});
+ w.append(el("div",{class:"card"},el("h3",{},"My notes"),el("p",{class:"muted small",style:"margin:6px 0 10px"},"Notes are saved on this device for each career."),ta));
+ return w}
+function targetCard(c,n,dn){const inp=el("input",{type:"date",id:"td","aria-label":"Target date",value:D.target[c]||""}),out=el("p",{class:"small",role:"status",style:"margin:10px 0 0"});
+ const calc=()=>{const val=inp.value;out.className="small";
+  if(dn>=n){out.textContent="All stages are complete.";return}
+  if(!val){out.className="small muted";out.textContent="Choose a date to see how many stages you need to finish each week.";return}
+  const days=Math.ceil((new Date(val+"T00:00:00")-new Date(today()+"T00:00:00"))/864e5);
+  if(!(days>0)){out.className="small bad";out.textContent="That date has passed or is today. Choose a later date.";return}
+  const weeks=Math.max(1,Math.ceil(days/7)),left=n-dn,per=left/weeks;
+  out.textContent=left+" stage"+(left===1?"":"s")+" left in "+weeks+" week"+(weeks===1?"":"s")+": about "+(per<1?"one stage every "+Math.round(1/per)+" weeks":(Math.round(per*10)/10)+" stage"+(Math.round(per*10)/10===1?"":"s")+" per week")+"."};
+ inp.addEventListener("change",()=>{D.target[c]=inp.value;save();calc()});calc();
+ return el("div",{class:"card"},el("h3",{},"Target date"),el("p",{class:"muted small",style:"margin:6px 0 10px"},"Set a date to finish this roadmap. It is a planning aid, not a promise."),inp,out)}
+function skillsCard(c){const topics=topicsOf(c),sk=D.skills[c]||(D.skills[c]={}),out=el("div",{class:"chips"});
+ const focus=()=>{out.replaceChildren();const low=topics.filter(t=>!sk[t]||sk[t]<=2);if(low.length)low.forEach(t=>out.append(chip(t)));else out.append(el("span",{class:"small muted"},"No focus areas. Keep practising."))};
+ const LV=["Beginner","Basic","Comfortable","Strong","Expert"];
+ const rows=topics.map(t=>{const s=el("select",{"aria-label":"Your level in "+t},el("option",{value:""},"Not rated"),[1,2,3,4,5].map(v=>el("option",{value:String(v)},v+" - "+LV[v-1])));
+  s.value=sk[t]?String(sk[t]):"";s.addEventListener("change",()=>{if(s.value)sk[t]=+s.value;else delete sk[t];save();focus()});
+  return el("div",{class:"row sp",style:"padding:5px 0"},el("span",{style:"flex:1;min-width:140px"},t),el("div",{style:"width:180px;max-width:100%"},s))});
+ focus();
+ return el("div",{class:"card"},el("h3",{},"Skills self-check"),el("p",{class:"muted small",style:"margin:6px 0 10px"},"Rate yourself honestly. Topics rated 2 or lower, or not rated, show up as focus areas."),rows,el("h4",{style:"margin-top:12px"},"Focus areas"),out)}
+function stageList(c,steps){const list=el("div",{class:"slist"});
+ steps.forEach((x,i)=>{const k=c+i,done=!!D.done[k];if(steps.length===15&&i%5===0)list.append(el("h3",{class:"ph"},PH[i/5]));
+  const cb=el("input",{type:"checkbox",id:"st"+i,checked:done,"aria-label":"Mark stage "+(i+1)+" complete"});
+  cb.addEventListener("change",()=>{const y=scrollY;
+   if(cb.checked){D.done[k]=true;D.log.push({d:today(),t:x[0],g:c})}else{delete D.done[k];const j=D.log.map(l=>l.t+"|"+l.g).lastIndexOf(x[0]+"|"+c);if(j>=0)D.log.splice(j,1)}
+   save();render();scrollTo(0,y)});
+  list.append(el("div",{class:"stage"+(done?" done":"")},cb,el("div",{},el("div",{class:"tiny muted"},"Stage "+(i+1)+" of "+steps.length+(x[2]?" · about "+x[2]:"")),el("div",{class:"st",style:"font-weight:700"},x[0]),el("p",{class:"small",style:"margin:4px 0 0"},x[1]),x[4]&&x[4].length?el("ul",{class:"small"},x[4].map(t=>el("li",{},t))):null,x[3]?el("p",{class:"tiny muted",style:"margin:8px 0 0"},"Done when: "+x[3]):null)))});
+ return list}
+function printPlan(){const c=D.role,steps=stepsOf(c),r=el("div",{class:"resume"});
+ r.append(el("h1",{},c+": my plan"),el("p",{},D.name+" · "+today()),el("p",{},pctOf(c)+"% complete ("+doneN(c)+" of "+steps.length+" stages)"),el("h2",{},"Stages"),el("ul",{style:"list-style:none;padding:0"},steps.map((s,i)=>el("li",{style:"margin-bottom:6px"},(D.done[c+i]?"[x] ":"[  ] ")+(i+1)+". "+s[0]))));
+ if(D.notes[c])r.append(el("h2",{},"Notes"),el("p",{style:"white-space:pre-wrap"},D.notes[c]));
+ printNode(r)}
+
+/* ----- resume: ATS checker and builder ----- */
+const STOP=new Set("the and for with that this from your you are will have has not but our their they his her was were can may should would about into over under between such using use used able who what when where which while also more most other than then them these those its all any each per via etc years year work team role company job candidate ability skills skill experience required preferred responsibilities strong good".split(" "));
+const VERBS="built developed designed led created implemented improved reduced increased analyzed analysed deployed managed organized organised launched automated optimized optimised delivered trained taught researched wrote presented coordinated achieved established resolved tested maintained collaborated mentored planned supported negotiated generated".split(" ");
+const toks=s=>(s.toLowerCase().match(/[a-z][a-z+#.\/-]{2,}/g)||[]).map(w=>w.replace(/[.\/-]+$/,"")).filter(w=>w.length>2&&!STOP.has(w));
+function atsScore(txt,jd){const w=txt.trim().split(/\s+/).filter(Boolean).length,low=txt.toLowerCase(),R=[];
+const add=(n,got,max,tip)=>R.push({n,got:Math.round(got*10)/10,max,tip:got<max?tip:""});
+const em=/[\w.+-]+@[\w-]+\.\w+/.test(txt),ph=/(\+?\d[\d\s().-]{8,}\d)/.test(txt),ln=/(linkedin|github|portfolio|behance)/i.test(txt);
+add("Contact details",(em?4:0)+(ph?3:0)+(ln?3:0),10,`Add ${[em?"":"an email",ph?"":"a phone number",ln?"":"a LinkedIn or GitHub link"].filter(Boolean).join(", ")} near the top.`);
+const sec=[[/education|academic/,5,"Education"],[/skills|technologies|tools/,5,"Skills"],[/experience|internship|employment|work history/,3,"Experience or Internships"],[/projects?/,3,"Projects"],[/summary|objective|profile/,2,"Summary"],[/certif|achievement|award/,2,"Certifications or Achievements"]];
+let sg=0;const ms=[];sec.forEach(x=>{if(x[0].test(low))sg+=x[1];else ms.push(x[2])});
+add("Standard sections",sg,20,"Add clear headings for: "+ms.join(", ")+". ATS software looks for these exact kinds of headings.");
+let kws=[],src="";if(jd&&jd.trim().length>40){src="the job description";kws=toks(jd)}else if(CUR()){src="your "+CUR()+" roadmap";kws=toks(stepsOf(CUR()).map(x=>x[0]+" "+x[1]).join(" "))}
+const f={};kws.forEach(k=>f[k]=(f[k]||0)+1);kws=Object.keys(f).sort((a,b)=>f[b]-f[a]).slice(0,25);
+const rs=new Set(toks(txt)),hit=kws.filter(k=>rs.has(k)),miss=kws.filter(k=>!rs.has(k));
+if(kws.length)add("Keyword match",hit.length/kws.length*30,30,`Only ${hit.length} of ${kws.length} key terms from ${src} appear. Add the missing ones where they are truthful.`);
+const nums=(txt.match(/\d+(\.\d+)?%?/g)||[]).length;add("Measurable impact",Math.min(nums/6,1)*15,15,"Add numbers: users, percentages, time saved, marks, team size, money.");
+const vu=new Set(VERBS.filter(v=>low.includes(v)));add("Action verbs",Math.min(vu.size/8,1)*10,10,"Start bullets with verbs like built, led, improved, analysed, deployed.");
+add("Length",w>=300&&w<=800?10:(w>=150&&w<1000?5:2),10,`Your resume has ${w} words. Aim for 300–800 (one page for students).`);
+const bl=(txt.match(/^\s*[•\-*▪●]/gm)||[]).length,bad=/[│┃▌■□☐✓✔►➤]/.test(txt),dt=/\b(19|20)\d{2}\b/.test(txt);
+add("Formatting",(bl>=5?2:0)+(bad?0:2)+(dt?1:0),5,[bl>=5?"":"use bullet points for achievements",bad?"remove special symbols or table characters":"",dt?"":"include dates (month and year)"].filter(Boolean).join("; ")+".");
+const max=R.reduce((a,x)=>a+x.max,0),got=R.reduce((a,x)=>a+x.got,0);
+return{score:Math.round(got/max*100),R,miss:miss.slice(0,12),src,hasKw:kws.length>0}}
+
+function atsResultNodes(r){const out=[];
+ const verdict=r.score>=80?"Strong. Likely to parse and match well.":r.score>=60?"Good. A few fixes will help.":r.score>=40?"Needs work before you apply.":"Weak. Fix the items below first.";
+ const ring=ringEl(r.score);ring.firstChild.textContent=String(r.score);ring.setAttribute("aria-label","ATS score "+r.score+" out of 100");
+ out.push(el("div",{class:"card"},el("div",{class:"row"},ring,el("div",{},el("h2",{},"ATS score: "+r.score+" / 100"),el("p",{class:"muted",style:"margin:4px 0 0"},verdict))),el("div",{class:"stack",style:"margin-top:14px"},r.R.map(x=>el("div",{},el("div",{class:"row sp small"},el("b",{},x.n),el("span",{class:"muted"},x.got+" / "+x.max)),el("div",{class:"bar"},el("i",{style:"width:"+(x.got/x.max*100)+"%"})))))));
+ const fx=r.R.filter(x=>x.tip).sort((a,b)=>(b.max-b.got)-(a.max-a.got)).slice(0,4);
+ out.push(el("div",{class:"card"},el("h3",{},fx.length?"Fix these first":"No major issues found"),fx.length?el("ul",{class:"small",style:"margin:8px 0 0;padding-left:20px"},fx.map(x=>el("li",{},el("b",{},x.n+": "),x.tip))):null));
+ if(r.miss.length)out.push(el("div",{class:"card"},el("h3",{},"Missing keywords from "+r.src),el("div",{class:"chips",style:"margin-top:8px"},r.miss.map(chip)),el("p",{class:"tiny muted",style:"margin:10px 0 0"},"Add only the skills you genuinely have.")));
+ out.push(el("p",{class:"tiny muted"},"This is an estimate based on common ATS rules, not the score of a real hiring system. It reads text only, so layout, columns, images and fonts in your file are not judged. Use a single-column PDF or DOCX with standard headings."));
+ return out}
+let pdfLib=null,pdfLoading=null;
+function loadScript(src){return new Promise((res,rej)=>{const e=document.createElement("script");e.src=new URL(src,document.baseURI).href;e.onload=res;e.onerror=()=>rej(new Error("Could not load "+src));document.head.append(e)})}
+/* PDF.js is loaded as plain scripts (not ES modules) so PDF reading also works when index.html is opened by double-click (file://) */
+function loadPdfLib(){if(pdfLib)return Promise.resolve(pdfLib);
+ if(!pdfLoading)pdfLoading=(async()=>{await loadScript("vendor/pdf.worker.min.js");await loadScript("vendor/pdf.min.js");const m=window.pdfjsLib;if(!m||!m.getDocument)throw new Error("PDF reader did not start");m.GlobalWorkerOptions.workerSrc=new URL("vendor/pdf.worker.min.js",document.baseURI).href;pdfLib=m;return m})().catch(e=>{pdfLoading=null;throw e});
+ return pdfLoading}
+async function pdfToText(file){const lib=await loadPdfLib(),buf=await file.arrayBuffer(),doc=await lib.getDocument({data:buf,isEvalSupported:false}).promise,n=Math.min(doc.numPages,10);let out="";
+ for(let p=1;p<=n;p++){const page=await doc.getPage(p),tc=await page.getTextContent();let lastY=null,line="";
+  for(const it of tc.items){if(typeof it.str!=="string")continue;const y=it.transform?it.transform[5]:0;if(lastY!==null&&Math.abs(y-lastY)>3){out+=line.trim()+"\n";line=""}line+=it.str+(it.hasEOL?"\n":" ");lastY=y}
+  out+=line.trim()+"\n\n"}
+ out=out.replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();return{text:out,pages:doc.numPages,words:out.split(/\s+/).filter(Boolean).length,cut:doc.numPages>10}}
+function resume(){const w=el("div",{class:"wrap stack"});
+ w.append(el("div",{class:"row sp"},el("h1",{},"Resume"),el("div",{class:"seg",role:"group","aria-label":"Resume tools"},[["ats","ATS checker"],["build","Resume builder"]].map(([k,l])=>el("button",{type:"button","aria-pressed":RS===k?"true":"false",onclick:()=>{RS=k;render()}},l)))));
+ w.append(RS==="ats"?atsView():builderView());return w}
+function atsView(){
+ const t=el("textarea",{id:"rt","aria-label":"Resume text",placeholder:"Paste your resume text here, or upload a PDF above.",value:AT.text}),jd=el("textarea",{id:"jd",style:"min-height:90px","aria-label":"Job description",placeholder:"Optional: paste a job description to check keyword match against that job.",value:AT.jd});
+ t.addEventListener("input",()=>{AT.text=t.value});jd.addEventListener("input",()=>{AT.jd=jd.value});
+ const res=el("div",{class:"stack"}),status=el("p",{class:"small "+AT.cls,role:"status","aria-live":"polite"},AT.msg);
+ const say=(c,m)=>{AT.cls=c;AT.msg=m;status.className="small "+c;status.textContent=m};
+ const draw=()=>{res.replaceChildren();if(AT.res)res.append(...atsResultNodes(AT.res))};
+ const run=fromPdf=>{const v=t.value.trim();if(v.length<80){say("bad","Paste at least a few lines of your resume first, or upload a PDF.");return}
+  AT.text=t.value;AT.res=atsScore(v,jd.value);D.ats=AT.res.score;save();if(!fromPdf)say("muted","");draw();res.scrollIntoView({behavior:"smooth",block:"nearest"})};
+ const check=btn("Check ATS score","",()=>run(false),"check");
+ const fi=el("input",{type:"file",id:"rpdf",accept:"application/pdf,.pdf","aria-label":"Upload your resume as a PDF"});
+ fi.addEventListener("change",async()=>{const f=fi.files&&fi.files[0];if(!f)return;
+  if(!/\.pdf$/i.test(f.name)&&f.type!=="application/pdf"){say("bad","Please choose a PDF file.");fi.value="";return}
+  if(f.size>10*1024*1024){say("bad","That PDF is larger than 10 MB. Export a smaller file or paste the text instead.");fi.value="";return}
+  say("muted","Reading your PDF…");check.disabled=true;let ok=false;
+  try{const r=await pdfToText(f);t.value=r.text;AT.text=r.text;
+   if(r.words<20)say("bad","No readable text was found. This looks like a scanned or image-only PDF. Use a PDF exported from Word or Google Docs, or paste the text instead.");
+   else{say("ok","Read "+r.pages+" page"+(r.pages===1?"":"s")+" and "+r.words+" words from "+f.name+(r.cut?" (first 10 pages only)":"")+". Your score is shown below.");ok=true}}
+  catch(e){const m=String(e&&e.message||"");
+   say("bad",/Could not load|did not start/i.test(m)?"The PDF reader files could not be loaded. Keep the vendor folder next to index.html, or paste the text instead.":"Could not read this PDF ("+(m||"unknown error")+"). Paste the text instead.")}
+  check.disabled=false;fi.value="";if(ok)run(true)});
+ draw();
+ const left=el("div",{class:"card"},el("h3",{},"Your resume"),el("label",{for:"rpdf"},"Upload a PDF"),fi,el("p",{class:"tiny muted",style:"margin:6px 0 0"},"PDF up to 10 MB. The file is read in your browser and is not uploaded anywhere."),status,el("label",{for:"rt"},"Resume text"),t,el("label",{for:"jd"},"Job description (optional)"),jd,el("div",{class:"row",style:"margin-top:14px"},check));
+ const tips=el("div",{class:"card"},el("h3",{},"What the ATS score checks"),el("ul",{class:"small",style:"margin:8px 0 0;padding-left:20px"},["Contact details (10): email, phone, LinkedIn or GitHub","Standard sections (20): Education, Skills, Experience or Projects, Summary","Keyword match (30): terms from your job description or your career roadmap","Measurable impact (15): numbers, percentages and results","Action verbs (10): built, led, improved, analysed","Length (10): 300 to 800 words is ideal","Formatting (5): bullet points, dates, no special symbols"].map(x=>el("li",{},x))),el("p",{class:"tiny muted",style:"margin:10px 0 0"},"Tip: use a single-column PDF exported from Word or Google Docs, with standard headings, and avoid tables, text boxes and images."));
+ return el("div",{class:"grid g2"},left,el("div",{class:"stack"},res,tips))}
+const lines=s=>String(s||"").split("\n").map(x=>x.trim()).filter(Boolean);
+const skillList=s=>String(s||"").split(/[,\n]/).map(x=>x.trim()).filter(Boolean);
+function resumeNode(R){const r=el("div",{class:"resume"}),contact=[R.email,R.phone,R.city,R.link].filter(Boolean).join("  |  ");
+ r.append(el("h1",{},R.name||"Your Name"));if(contact)r.append(el("p",{},contact));
+ const sec=(title,items,bul)=>{if(!items.length)return;r.append(el("h2",{},title));if(bul)r.append(el("ul",{},items.map(x=>el("li",{},x))));else items.forEach(x=>r.append(el("p",{},x)))};
+ sec("Summary",lines(R.summary),false);sec("Education",lines(R.education),true);const sk=skillList(R.skills);if(sk.length)r.append(el("h2",{},"Skills"),el("p",{},sk.join(", ")));
+ sec("Projects",lines(R.projects),true);sec("Experience",lines(R.experience),true);sec("Certifications and achievements",lines(R.certs),true);return r}
+function resumeText(R){const o=[],contact=[R.email,R.phone,R.city,R.link].filter(Boolean).join(" | ");o.push(R.name||"Your Name");if(contact)o.push(contact);
+ const sec=(t,items,b)=>{if(items.length){o.push("",t.toUpperCase());items.forEach(x=>o.push((b?"- ":"")+x))}};
+ sec("Summary",lines(R.summary),false);sec("Education",lines(R.education),true);const sk=skillList(R.skills);if(sk.length)o.push("","SKILLS",sk.join(", "));
+ sec("Projects",lines(R.projects),true);sec("Experience",lines(R.experience),true);sec("Certifications and achievements",lines(R.certs),true);return o.join("\n")}
+function builderView(){const R=D.resume,msg=el("p",{class:"tiny muted",role:"status"},"In the print window, choose Save as PDF as the destination."),prev=el("div",{id:"prev"});
+ const draw=()=>{prev.replaceChildren(resumeNode(R))};
+ const fields=[["name","Full name","text"],["email","Email","email"],["phone","Phone","tel"],["city","City","text"],["link","Profile link (LinkedIn, GitHub or portfolio)","text"]];
+ const areas=[["summary","Professional summary","Two or three lines about who you are and what you want to do."],["education","Education","One entry per line. Example: B.Sc. Statistics, ABC University, 2021 to 2024"],["skills","Skills","Separate with commas. Example: SQL, Python, Excel, communication"],["projects","Projects","One per line. Start with an action verb and add a result."],["experience","Experience or internships","One per line. Example: Data intern at XYZ, 2024. Built a weekly sales report that saved 4 hours."],["certs","Certifications and achievements","One per line."]];
+ const form=el("div",{class:"card"},el("h3",{},"Your details"),el("p",{class:"muted small",style:"margin:6px 0 0"},"Fill in what you have. The preview updates as you type and is saved on this device."));
+ fields.forEach(([k,l,t])=>{const i=el("input",{type:t,id:"rb-"+k,value:R[k]||"",maxlength:"120",autocomplete:"off"});i.addEventListener("input",()=>{R[k]=i.value;save();draw()});form.append(el("label",{for:"rb-"+k},l),i)});
+ areas.forEach(([k,l,ph])=>{const a=el("textarea",{id:"rb-"+k,placeholder:ph,maxlength:"3000",style:"min-height:90px",value:R[k]||""});a.addEventListener("input",()=>{R[k]=a.value;save();draw()});form.append(el("label",{for:"rb-"+k},l),a)});
+ draw();
+ const copy=async()=>{const txt=resumeText(R);try{await navigator.clipboard.writeText(txt);msg.textContent="Copied to the clipboard."}catch(e){try{const ta=el("textarea",{style:"position:fixed;opacity:0"});ta.value=txt;document.body.append(ta);ta.select();const ok=document.execCommand("copy");ta.remove();msg.textContent=ok?"Copied to the clipboard.":"Copy was blocked. Select the preview text and copy it manually."}catch(e2){msg.textContent="Copy was blocked. Select the preview text and copy it manually."}}};
+ const acts=el("div",{class:"row"},btn("Print or save as PDF","",()=>printNode(resumeNode(R)),"printer"),btn("Copy text","sec",copy,"copy"),btn("Check its ATS score","sec",()=>{AT.text=resumeText(R);AT.res=null;AT.msg="";AT.cls="muted";RS="ats";render()},"check"));
+ return el("div",{class:"grid g2"},form,el("div",{class:"stack"},acts,msg,prev))}
+
+/* ----- interview practice ----- */
+function techQs(c){const q=(ROLEQ[c]||[]).slice();topicsOf(c).slice(0,6).forEach(t=>q.push('Explain "'+t+'" in simple terms and give one practical example.'));
+ q.push("What does a typical day look like for a "+c+", and which part would you find most challenging?","Describe a piece of practical work or a project that shows your skills for this career.","How would you keep your knowledge up to date in this field?");return q}
+function evalTech(ans,topics){const n=ans.trim().split(/\s+/).filter(Boolean).length,low=ans.toLowerCase(),sentences=(ans.match(/[.!?](\s|$)/g)||[]).length;
+ const hasEx=/(for example|for instance|such as|e\.g\.|in my project|i used)/.test(low),nums=/\d/.test(ans);
+ const hit=topics.filter(t=>t.toLowerCase().split(/[^a-z0-9+#]+/).filter(w=>w.length>3).some(w=>low.includes(w))).length;
+ return [[n>=40&&n<=250,"Length: "+n+" words. Aim for about 40 to 200 words: enough to explain, short enough to stay clear."],[sentences>=3,"Structure: use at least three clear sentences (define it, explain it, give an example)."],[hasEx,"Example: include a concrete example, for instance with the words \"for example\"."],[nums,"Specifics: add a number, a tool name or a result where it fits."],[!topics.length||hit>0,"Key terms: mention at least one core topic of this career in your own words."]]}
+function evalBeh(ans){const n=ans.trim().split(/\s+/).filter(Boolean).length,low=ans.toLowerCase();
+ const S=/(when |situation|at the time|during |in my |last year|in college|at school)/.test(low),T=/(my task|my goal|i needed to|i had to|i was responsible|the aim|the goal)/.test(low),A=/(i decided|i led|i built|i created|i organised|i organized|i asked|i wrote|i fixed|i planned|i worked|i started|i talked|i suggested|i learned|i practised|i practiced)/.test(low),Rr=/(as a result|the result|result was|resulted|achieved|improved|reduced|increased|outcome|in the end|i learned|we won|we finished)/.test(low);
+ return [[n>=70&&n<=250,"Length: "+n+" words. Aim for about 80 to 200 words."],[S,"Situation: set the scene (when, where, who was involved)."],[T,"Task: say what you needed to achieve or were responsible for."],[A,"Action: describe what you personally did, using \"I\"."],[Rr,"Result: finish with the outcome and what you learned."],[/\d/.test(ans),"Specifics: add a number, a date or a measurable result."]]}
+function interview(){const c=D.role,w=el("div",{class:"wrap stack"});
+ w.append(el("div",{class:"row sp"},el("h1",{},"Interview practice"),el("div",{class:"seg",role:"group","aria-label":"Question type"},[["tech","Domain questions"],["beh","Behavioural"]].map(([k,l])=>el("button",{type:"button","aria-pressed":IM===k?"true":"false",onclick:()=>{IM=k;IFB=null;render()}},l)))));
+ const qs=IM==="tech"?techQs(c):BEH,i=IQ[IM]%qs.length;
+ const ta=el("textarea",{id:"ia","aria-label":"Your answer",placeholder:"Type your answer as you would say it in the interview…",value:IANS[IM]||""});ta.addEventListener("input",()=>{IANS[IM]=ta.value});
+ const fb=el("div",{class:"stack",role:"status","aria-live":"polite"});
+ const draw=()=>{fb.replaceChildren();if(!IFB)return;const ok=IFB.filter(x=>x[0]).length;fb.append(el("h4",{},"Self-check: "+ok+" of "+IFB.length+" points covered"),el("ul",{class:"checks"},IFB.map(x=>el("li",{},el("span",{class:x[0]?"ok":"muted"},x[0]?"✓":"○"),el("span",{},x[1])))),el("p",{class:"tiny muted"},"This checklist looks at structure and length only. It cannot judge whether your answer is correct, so compare it with a trusted source or ask a teacher or mentor."))};
+ const check=()=>{const v=ta.value.trim();if(v.split(/\s+/).filter(Boolean).length<8){IFB=[[false,"Write a fuller answer first (at least a couple of sentences)."]]}else{IFB=IM==="tech"?evalTech(v,topicsOf(c)):evalBeh(v);D.practiced=(D.practiced||0)+1;save()}draw()};
+ const move=d=>{IQ[IM]=(IQ[IM]+d+qs.length)%qs.length;IANS[IM]="";IFB=null;render()};
+ draw();
+ const main=el("div",{class:"card"},el("p",{class:"muted small",style:"margin-bottom:6px"},(IM==="tech"?"Domain question ":"Behavioural question ")+(i+1)+" of "+qs.length+". Answers practised so far: "+(D.practiced||0)),el("div",{class:"q"},qs[i]),ta,el("div",{class:"row",style:"margin-top:12px"},btn("Check my answer","",check,"check"),btn("Previous","sec",()=>move(-1),"left"),btn("Next question","sec",()=>move(1),"right")),el("div",{style:"margin-top:14px"},fb));
+ const side=el("div",{class:"card"},el("h3",{},IM==="tech"?"What a strong answer includes":"The STAR method"),
+  el("ul",{class:"small",style:"margin:8px 0 0;padding-left:20px"},(IM==="tech"?["Start with a one-line definition","Explain how or why it works","Give a short, real example","Mention a limit, trade-off or common mistake","Finish with how you used it in practice"]:["Situation: set the scene briefly","Task: your responsibility or goal","Action: what you personally did","Result: the outcome, with numbers if possible","Reflection: what you learned"]).map(x=>el("li",{},x))),
+  el("p",{class:"tiny muted",style:"margin:10px 0 0"},"Practise out loud, time yourself, and keep each answer under two minutes."));
+ w.append(el("div",{class:"grid g2 wide"},main,side));return w}
+
+/* ----- toolkit ----- */
+const STATUS=["Wishlist","Applied","Interview","Offer","Rejected"];
+function trackerCard(){const card=el("div",{class:"card"},el("h3",{},"Application tracker"),el("p",{class:"muted small",style:"margin:6px 0 10px"},"Keep track of colleges, jobs and internships you are interested in."));
+ const org=el("input",{id:"ao",type:"text",maxlength:"80",placeholder:"Organisation or college","aria-label":"Organisation or college"}),rl=el("input",{id:"ar",type:"text",maxlength:"80",placeholder:"Role or course","aria-label":"Role or course"}),st=el("select",{id:"as","aria-label":"Status"},STATUS.map(s=>el("option",{value:s},s))),dt=el("input",{id:"ad",type:"date","aria-label":"Date",value:today()}),err=el("p",{class:"small bad",role:"alert"});
+ const add=()=>{if(!org.value.trim()){err.textContent="Enter the organisation or college name.";return}D.apps.push({id:uid(),org:org.value.trim(),role:rl.value.trim(),status:st.value,date:dt.value||"",note:""});save();render()};
+ card.append(el("div",{class:"grid g4"},org,rl,st,dt),err,el("div",{class:"row",style:"margin:10px 0"},btn("Add","",add,"plus")));
+ if(D.apps.length)card.append(el("div",{class:"scroll"},el("table",{class:"tbl"},el("thead",{},el("tr",{},["Organisation","Role or course","Status","Date",""].map(h=>el("th",{},h)))),el("tbody",{},D.apps.map(a=>{const s=el("select",{"aria-label":"Status for "+a.org},STATUS.map(x=>el("option",{value:x},x)));s.value=a.status;s.addEventListener("change",()=>{a.status=s.value;save()});
+  return el("tr",{},el("td",{},a.org),el("td",{},a.role),el("td",{},s),el("td",{},a.date||""),el("td",{},el("button",{type:"button",class:"btn ghost sm","aria-label":"Delete "+a.org,onclick:()=>{D.apps=D.apps.filter(x=>x.id!==a.id);save();render()}},ic("trash",16))))})))));
+ else card.append(el("p",{class:"muted small"},"No applications yet."));return card}
+function checklist(key,title,items){const done=items.filter((_,i)=>D.checks[key+i]).length;
+ return el("details",{class:"card"},el("summary",{},title+" ("+done+"/"+items.length+")"),el("ul",{class:"checks"},items.map((t,i)=>{const cb=el("input",{type:"checkbox",id:key+i,checked:!!D.checks[key+i]});cb.addEventListener("change",()=>{if(cb.checked)D.checks[key+i]=true;else delete D.checks[key+i];save();const s=cb.closest("details").querySelector("summary");s.textContent=title+" ("+items.filter((_,j)=>D.checks[key+j]).length+"/"+items.length+")"});return el("li",{},cb,el("label",{for:key+i,style:"margin:0;font-weight:400"},t))})))}
+let DEL_ME=false;
+function exportData(){flush();const blob=new Blob([JSON.stringify({app:"career-mentor",version:1,exported:new Date().toISOString(),data:D},null,2)],{type:"application/json"}),a=el("a",{href:URL.createObjectURL(blob),download:"career-mentor-"+slug(D.name)+".json"});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000)}
+function cleanData(d,name){const o=defData(name),S=(v,n)=>typeof v==="string"?v.slice(0,n):"";
+ o.role=inCareers(d.role)?d.role:"";if(Array.isArray(d.goals))o.goals=d.goals.filter(inCareers).slice(0,60);if(o.role&&!o.goals.includes(o.role))o.goals.push(o.role);
+ if(Array.isArray(d.short))o.short=d.short.filter(inCareers).slice(0,100);
+ if(isObj(d.done))Object.keys(d.done).slice(0,3000).forEach(k=>{if(d.done[k]===true&&k.length<100)o.done[k]=true});
+ if(Array.isArray(d.log))o.log=d.log.filter(l=>isObj(l)&&typeof l.d==="string"&&typeof l.t==="string"&&typeof l.g==="string").slice(-500).map(l=>({d:S(l.d,10),t:S(l.t,120),g:S(l.g,60)}));
+ if(isObj(d.notes))Object.keys(d.notes).slice(0,200).forEach(k=>{if(typeof d.notes[k]==="string")o.notes[k.slice(0,60)]=d.notes[k].slice(0,20000)});
+ if(isObj(d.skills))Object.keys(d.skills).slice(0,200).forEach(c=>{if(isObj(d.skills[c])){o.skills[c.slice(0,60)]={};Object.keys(d.skills[c]).slice(0,40).forEach(t=>{const v=+d.skills[c][t];if(v>=1&&v<=5)o.skills[c.slice(0,60)][t.slice(0,120)]=v})}});
+ if(isObj(d.target))Object.keys(d.target).slice(0,200).forEach(k=>{if(/^\d{4}-\d{2}-\d{2}$/.test(d.target[k]))o.target[k.slice(0,60)]=d.target[k]});
+ if(Array.isArray(d.apps))o.apps=d.apps.filter(isObj).slice(0,500).map(a=>({id:S(a.id,30)||uid(),org:S(a.org,80),role:S(a.role,80),status:STATUS.includes(a.status)?a.status:"Wishlist",date:S(a.date,10),note:S(a.note,300)}));
+ if(isObj(d.checks))Object.keys(d.checks).slice(0,300).forEach(k=>{if(d.checks[k]===true)o.checks[k.slice(0,40)]=true});
+ if(isObj(d.resume))Object.keys(d.resume).slice(0,20).forEach(k=>{if(typeof d.resume[k]==="string")o.resume[k.slice(0,20)]=d.resume[k].slice(0,3000)});
+ if(isObj(d.quiz)&&isObj(d.quiz.pts)){const p={};Object.keys(TAGNAMES).forEach(t=>{const v=+d.quiz.pts[t];if(v>0&&v<1000)p[t]=v});o.quiz={date:S(d.quiz.date,10),pts:p,top:Array.isArray(d.quiz.top)?d.quiz.top.filter(inCareers).slice(0,8):[]}}
+ o.practiced=Math.max(0,Math.min(100000,+d.practiced||0));o.ats=typeof d.ats==="number"?Math.max(0,Math.min(100,d.ats)):null;return o}
+async function importFile(f){if(f.size>2*1024*1024)return{ok:false,msg:"That file is too large to be a Career Mentor backup."};
+ let j;try{j=JSON.parse(await f.text())}catch(e){return{ok:false,msg:"That file could not be read. Choose a backup file saved from Career Mentor."}}
+ if(!isObj(j)||j.app!=="career-mentor"||!isObj(j.data))return{ok:false,msg:"That is not a Career Mentor backup file."};
+ const base=(String(j.data.name||"").trim().slice(0,28)||"Restored profile");let nm=base+" (restored)",k=2;while(profiles.some(p=>p.name===nm))nm=base+" (restored "+(k++)+")";
+ const d=cleanData(j.data,nm);d.name=nm;const id=uid();if(D)flush();profiles.push({id:id,name:nm});saveProfiles();LS.set("cm.d."+id,JSON.stringify(d));openProfile(id);tab="home";NOTICE="Backup restored as "+nm+".";return{ok:true,msg:NOTICE}}
+function toolkit(){const w=el("div",{class:"wrap stack"});
+ w.append(el("h1",{},"Toolkit"),trackerCard());
+ w.append(el("h2",{},"Checklists"),el("div",{class:"grid g3"},checklist("ci","Interview day",CHECKS.interview),checklist("cr","Resume final check",CHECKS.resume),checklist("cd","Application documents",CHECKS.docs)));
+ w.append(el("h2",{},"Common questions"),el("div",{class:"stack"},FAQ.map(f=>el("details",{class:"card"},el("summary",{},f[0]),el("p",{style:"margin:0"},f[1])))));
+ w.append(el("h2",{},"Official links and free learning"),el("div",{class:"card"},el("p",{class:"tiny muted",style:"margin:0 0 8px"},"These open external websites. Check them for current dates, fees and rules."),el("ul",{style:"margin:0;padding-left:20px"},GENERAL_LINKS.map(x=>el("li",{},link(x[0],x[1]))))));
+ const msg=el("p",{class:"small",role:"status"}),fi=el("input",{type:"file",id:"imp",accept:"application/json,.json","aria-label":"Choose a backup file"});
+ fi.addEventListener("change",async()=>{const f=fi.files&&fi.files[0];if(!f)return;const r=await importFile(f);msg.className="small "+(r.ok?"ok":"bad");msg.textContent=r.msg;fi.value="";if(r.ok){render();scrollTo(0,0)}});
+ w.append(el("h2",{},"Your data"),el("div",{class:"card"},el("p",{class:"muted small",style:"margin:0 0 10px"},"Career Mentor keeps your progress in this browser only. Download a backup to keep a safe copy or to move to another device. Restoring creates a new profile."),el("div",{class:"row"},btn("Download backup","",exportData,"download")),el("label",{for:"imp"},"Restore from a backup file"),fi,msg,
+  el("div",{class:"row",style:"margin-top:16px"},DEL_ME?el("span",{class:"row"},el("span",{class:"small bad"},"Delete this profile and all its data?"),btn("Yes, delete","danger sm",()=>{deleteProfile(activeId);DEL_ME=false;render()}),btn("Cancel","sec sm",()=>{DEL_ME=false;render()})):btn("Delete this profile","danger sm",()=>{DEL_ME=true;render()},"trash"))));
+ w.append(el("div",{class:"card"},el("h3",{},"About Career Mentor"),el("p",{class:"small muted",style:"margin:8px 0 0"},"Career Mentor is a free planning tool. Career information is general guidance for India and can be out of date, so always confirm eligibility, fees and dates with the official institute or exam body. There are no accounts and no servers: your data never leaves this browser. PDF reading uses PDF.js (Apache License 2.0).")));
+ return w}
+
+/* ----- start ----- */
+(function init(){try{localStorage.setItem("cm.t","1");localStorage.removeItem("cm.t")}catch(e){storeOK=false}
+ loadProfiles();const h=location.hash.slice(1);if(TABS.some(t=>t[0]===h))tab=h;
+ if(activeId&&profiles.some(p=>p.id===activeId))openProfile(activeId);else{activeId=null;D=null}
+ render();
+ window.addEventListener("pagehide",flush);document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()})})();
+
+</script>
+</body>
+</html>
